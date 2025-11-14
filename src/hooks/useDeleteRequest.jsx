@@ -1,7 +1,6 @@
 import { useState } from "react";
 import getCookie from '../utils/CSRFToken'
-
-const BASE_URL = "https://semillitasampiu-api-production.up.railway.app/api/";
+import { getApiUrl } from "../utils/apiConfig";
 
 const useDeleteRequest=()=>{
     const [success,setSuccess] = useState(false);
@@ -12,7 +11,7 @@ const useDeleteRequest=()=>{
         setLoading(true)
         setError(null)
         setSuccess(false)
-        const url=`${BASE_URL}${endpoint}/${id}/`
+        const url=getApiUrl(`${endpoint}/${id}/`)
         try {
             const res = await fetch(url,{
                 method : 'DELETE',

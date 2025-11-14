@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import useGetRequest from "../../hooks/useGetRequest";
 import { FaInfoCircle } from "react-icons/fa";
 import { MdUpdate } from "react-icons/md";
@@ -12,17 +12,18 @@ const ListarJugadores = () => {
   const [jugadorSeleccionado, setJugadorSeleccionado] = useState(null);
 
   useEffect(() => {
-    getData("jugador");
-  }, []);
+    const controller = new AbortController();
+    getData("jugador", null, '', controller.signal);
+    
+    return () => {
+      controller.abort();
+    };
+  }, [getData]);
 
-  const abrirModalActualizar = (jugador) => {
+  const abrirModalActualizar = useCallback((jugador) => {
     setJugadorSeleccionado(jugador);
     setMostrarModal(true);
-  };
-
-  const actualizarJugador = (datosActualizados) => {
-    console.log("Datos actualizados:", datosActualizados);
-  };
+  }, []);
 
 
   if (loading)
@@ -50,10 +51,13 @@ const ListarJugadores = () => {
           <div className="space-y-6">
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
               <div className="max-w-full overflow-x-auto">
-                <table table className={`min-w-full`}>
+                <table className="min-w-full">
                   {/* Table Header */}
                   <thead className="border-b border-gray-100 dark:border-white/[0.05]">
                     <tr>
+                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                        ID
+                      </th>
                       <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                         Nombre de Jugador
                       </th>
@@ -70,6 +74,11 @@ const ListarJugadores = () => {
                   <tbody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                     {jugadores.map((jugador) => (
                       <tr key={jugador.id}>
+                        <td className="px-5 py-4 sm:px-6 text-start">
+                          <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                            {jugador?.id}
+                          </span>
+                        </td>
                         <td className="px-5 py-4 sm:px-6 text-start">
                           <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                             {jugador?.username}
