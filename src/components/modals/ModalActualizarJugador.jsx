@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 const ModalActualizarJugador = ({ isOpen, onClose, jugador, onSubmit }) => {
   const [formData, setFormData] = useState({
-    username: "",
-    fecha_nacimiento: "",
+    username: '',
+    fecha_nacimiento: '',
   });
 
   useEffect(() => {
     if (jugador) {
       setFormData({
-        username: jugador.username || "",
-        fecha_nacimiento: jugador.fecha_nacimiento || "",
+        username: jugador.username || '',
+        fecha_nacimiento: jugador.fecha_nacimiento || '',
       });
     }
   }, [jugador]);

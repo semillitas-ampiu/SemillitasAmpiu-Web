@@ -1,12 +1,12 @@
-import { useEffect, useState, useCallback } from "react";
-import useGetRequest from "../../hooks/useGetRequest";
-import useDeleteRequest from "../../hooks/useDeleteRequest";
-import usePutRequest from "../../hooks/usePutRequest";
-import { FaInfoCircle } from "react-icons/fa";
-import { MdUpdate, MdDelete } from "react-icons/md";
-import ModalActualizarJugador from "../../components/modals/modalActualizarJugador";
-import Detalles from "./Detalles";
-import { Link } from "react-router-dom";
+import { useEffect, useState, useCallback } from 'react';
+import useGetRequest from '../../hooks/useGetRequest';
+import useDeleteRequest from '../../hooks/useDeleteRequest';
+import usePutRequest from '../../hooks/usePutRequest';
+import { FaInfoCircle } from 'react-icons/fa';
+import { MdUpdate, MdDelete } from 'react-icons/md';
+import ModalActualizarJugador from '../../components/modals/modalActualizarJugador';
+import Detalles from './Detalles';
+import { Link } from 'react-router-dom';
 
 const ListarJugadores = () => {
   const { getData, data: jugadores, error, loading } = useGetRequest();
@@ -17,8 +17,8 @@ const ListarJugadores = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    getData("jugador", null, '', controller.signal);
-    
+    getData('jugador', null, '', controller.signal);
+
     return () => {
       controller.abort();
     };
@@ -31,29 +31,28 @@ const ListarJugadores = () => {
 
   const handleUpdate = async (formData) => {
     if (jugadorSeleccionado) {
-      await putData("jugador", jugadorSeleccionado.id, formData);
+      await putData('jugador', jugadorSeleccionado.id, formData);
       setMostrarModal(false);
       setJugadorSeleccionado(null);
       const controller = new AbortController();
-      getData("jugador", null, '', controller.signal);
+      getData('jugador', null, '', controller.signal);
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este jugador?")) {
-      await deleteData("jugador", id);
+    if (window.confirm('¿Estás seguro de que deseas eliminar este jugador?')) {
+      await deleteData('jugador', id);
       const controller = new AbortController();
-      getData("jugador", null, '', controller.signal);
+      getData('jugador', null, '', controller.signal);
     }
   };
-
 
   if (loading)
     return <p className="text-center text-gray-400">cargando Jugadores...</p>;
   if (error)
     return (
       <p className="text-center text-red-500">
-        Error al cargar: {error?.error || "error desconocido"}
+        Error al cargar: {error?.error || 'error desconocido'}
       </p>
     );
   return (
@@ -110,11 +109,13 @@ const ListarJugadores = () => {
                           {jugador?.fecha_nacimiento}
                         </td>
                         <td className="px-2 py-2 text-sm">
-                          <Link to={`/detalles/${jugador.id}`} className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded-md transition inline-block">
+                          <Link
+                            to={`/detalles/${jugador.id}`}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded-md transition inline-block"
+                          >
                             <FaInfoCircle size={22} />
                           </Link>
-                        
-                        
+
                           <button
                             onClick={() => abrirModalActualizar(jugador)}
                             className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded-md transition"
