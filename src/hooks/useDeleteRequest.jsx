@@ -11,7 +11,7 @@ const useDeleteRequest=()=>{
         setLoading(true)
         setError(null)
         setSuccess(false)
-        const url=getApiUrl(`${endpoint}/${id}/`)
+        const url=getApiUrl(`${endpoint}/${id}`)
         try {
             const res = await fetch(url,{
                 method : 'DELETE',

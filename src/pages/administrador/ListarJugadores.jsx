@@ -1,13 +1,17 @@
 import { useEffect, useState, useCallback } from "react";
 import useGetRequest from "../../hooks/useGetRequest";
+import useDeleteRequest from "../../hooks/useDeleteRequest";
+import usePutRequest from "../../hooks/usePutRequest";
 import { FaInfoCircle } from "react-icons/fa";
-import { MdUpdate } from "react-icons/md";
+import { MdUpdate, MdDelete } from "react-icons/md";
 import ModalActualizarJugador from "../../components/modals/modalActualizarJugador";
 import Detalles from "./Detalles";
 import { Link } from "react-router-dom";
 
 const ListarJugadores = () => {
   const { getData, data: jugadores, error, loading } = useGetRequest();
+  const { deleteData } = useDeleteRequest();
+  const { putData } = usePutRequest();
   const [mostrarModal, setMostrarModal] = useState(false);
   const [jugadorSeleccionado, setJugadorSeleccionado] = useState(null);
 
@@ -24,6 +28,24 @@ const ListarJugadores = () => {
     setJugadorSeleccionado(jugador);
     setMostrarModal(true);
   }, []);
+
+  const handleUpdate = async (formData) => {
+    if (jugadorSeleccionado) {
+      await putData("jugador", jugadorSeleccionado.id, formData);
+      setMostrarModal(false);
+      setJugadorSeleccionado(null);
+      const controller = new AbortController();
+      getData("jugador", null, '', controller.signal);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("¿Estás seguro de que deseas eliminar este jugador?")) {
+      await deleteData("jugador", id);
+      const controller = new AbortController();
+      getData("jugador", null, '', controller.signal);
+    }
+  };
 
 
   if (loading)
@@ -91,13 +113,20 @@ const ListarJugadores = () => {
                           <Link to={`/detalles/${jugador.id}`} className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded-md transition inline-block">
                             <FaInfoCircle size={22} />
                           </Link>
-                        </td>
-                        <td className="px-4 py-2 text-sm">
+                        
+                        
                           <button
                             onClick={() => abrirModalActualizar(jugador)}
                             className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded-md transition"
                           >
                             <MdUpdate size={22} />
+                          </button>
+
+                          <button
+                            onClick={() => handleDelete(jugador.id)}
+                            className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-md transition ml-2"
+                          >
+                            <MdDelete size={22} />
                           </button>
                         </td>
                       </tr>
@@ -109,6 +138,14 @@ const ListarJugadores = () => {
           </div>
         </div>
       </div>
+      {mostrarModal && (
+        <ModalActualizarJugador
+          isOpen={mostrarModal}
+          onClose={() => setMostrarModal(false)}
+          jugador={jugadorSeleccionado}
+          onSubmit={handleUpdate}
+        />
+      )}
     </div>
   );
 };

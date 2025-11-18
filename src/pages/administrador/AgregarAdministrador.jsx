@@ -43,7 +43,7 @@ const AgregarAdministrador = () => {
     };
 
     // 3. Enviar al endpoint de creación de Jugadores
-    const url = getApiUrl("api/administrador/");
+    const url = getApiUrl("administrador/");
     await postData(url, payload);
 
     // 4. Lógica de respuesta

@@ -50,48 +50,52 @@ export default function Detalles() {
           </h3>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-          <div className="max-w-full overflow-x-auto">
-            <table className="min-w-full">
-              <thead className="border-b border-gray-100 dark:border-white/[0.05]">
-                <tr>
-                  <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                    Palabra en ampiu
-                  </th>
-                  <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                    Palabra en español
-                  </th>
-                  <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                    Nivel
-                  </th>
-                  <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                    Fecha de recolección
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                {recolecciones.map((item) => (
-                  <tr key={item.id}>
-                    <td className="px-5 py-4 sm:px-6 text-start">
-                      <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                        {item.palabra_data.pal_ampiu}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {item.palabra_data.pal_español}
-                    </td>
-                    <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {item.palabra_data.nivel}
-                    </td>
-                    <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {new Date(item.fecha_recogida).toLocaleDateString(
-                        "es-CO"
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <div className="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+          <div className="space-y-6">
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+              <div className="max-w-full overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="border-b border-gray-100 dark:border-white/[0.05]">
+                    <tr>
+                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                        Palabra en ampiu
+                      </th>
+                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                        Palabra en español
+                      </th>
+                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                        Nivel
+                      </th>
+                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                        Fecha de recolección
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                    {recolecciones.map((item) => (
+                      <tr key={item.id}>
+                        <td className="px-5 py-4 sm:px-6 text-start">
+                          <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                            {item.palabra_data.pal_ampiu}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                          {item.palabra_data.pal_español}
+                        </td>
+                        <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                          {item.palabra_data.nivel}
+                        </td>
+                        <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                          {new Date(item.fecha_recogida).toLocaleDateString(
+                            "es-CO"
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>

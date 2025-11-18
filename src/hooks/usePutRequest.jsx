@@ -11,7 +11,7 @@ const usePutRequest=()=>{
         setLoading(true)
         setError(null)
         setResponse(null)
-        const url=getApiUrl(`${endpoint}/${id}/`)
+        const url=getApiUrl(`${endpoint}/${id}`)
         const headers = {
             'x-CSRFToken' : getCookie('csrftoken'),
         };
