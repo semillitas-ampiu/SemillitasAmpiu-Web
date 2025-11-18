@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const ListarAdministradores = () => {
   const { getData, data: administradores, error, loading } = useGetRequest();
+  console.log(administradores);
 
   useEffect(() => {
     getData("administrador");

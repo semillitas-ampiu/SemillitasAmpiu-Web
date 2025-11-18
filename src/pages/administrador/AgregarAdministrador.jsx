@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import usePostRequest from "../../hooks/usePostRequest"; // Asumo que este hook maneja la conversión a JSON
 import { useNavigate } from "react-router-dom";
+import { getApiUrl } from "../../utils/apiConfig";
 
 const AgregarAdministrador = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const AgregarAdministrador = () => {
     };
 
     // 3. Enviar al endpoint de creación de Jugadores
-    const url = "http://127.0.0.1:8000/api/administrador/";
+    const url = getApiUrl("administrador/");
     await postData(url, payload);
 
     // 4. Lógica de respuesta

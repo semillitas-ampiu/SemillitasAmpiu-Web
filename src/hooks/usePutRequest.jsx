@@ -1,7 +1,6 @@
 import { useState } from "react";
 import getCookie from '../utils/CSRFToken'
-
-const BASE_URL = "https://semillitasampiu-api-production.up.railway.app/api/";
+import { getApiUrl } from "../utils/apiConfig";
 
 const usePutRequest=()=>{
     const [response,setResponse] = useState(null);
@@ -12,7 +11,7 @@ const usePutRequest=()=>{
         setLoading(true)
         setError(null)
         setResponse(null)
-        const url=`${BASE_URL}${endpoint}/${id}/`
+        const url=getApiUrl(`${endpoint}/${id}`)
         const headers = {
             'x-CSRFToken' : getCookie('csrftoken'),
         };

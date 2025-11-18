@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const ModalActualizarJugador = ({ isOpen, onClose, jugador, onSubmit }) => {
   const [formData, setFormData] = useState({
-    username: jugador?.username || "",
-    fecha_nacimiento: jugador?.fecha_nacimiento || "",
+    username: "",
+    fecha_nacimiento: "",
   });
+
+  useEffect(() => {
+    if (jugador) {
+      setFormData({
+        username: jugador.username || "",
+        fecha_nacimiento: jugador.fecha_nacimiento || "",
+      });
+    }
+  }, [jugador]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,7 +52,7 @@ const ModalActualizarJugador = ({ isOpen, onClose, jugador, onSubmit }) => {
             <input
               type="text"
               name="username"
-              value={jugador?.username}
+              value={formData.username}
               onChange={handleChange}
               placeholder="Ingrese el nombre"
               className="px-4 py-3 bg-gray-100 w-full text-slate-900 text-sm border-none focus:outline-blue-600 focus:bg-transparent rounded-lg"
@@ -57,20 +66,7 @@ const ModalActualizarJugador = ({ isOpen, onClose, jugador, onSubmit }) => {
             <input
               type="date"
               name="fecha_nacimiento"
-              value={jugador?.fecha_nacimiento}
-              onChange={handleChange}
-              className="px-4 py-3 bg-gray-100 w-full text-slate-900 text-sm border-none focus:outline-blue-600 focus:bg-transparent rounded-lg"
-            />
-          </div>
-
-          <div>
-            <label className="text-slate-900 text-sm mb-2 block">
-              Estado
-            </label>
-            <input
-              type="text"
-              name="Estado"
-              value={jugador?.Estado}
+              value={formData.fecha_nacimiento}
               onChange={handleChange}
               className="px-4 py-3 bg-gray-100 w-full text-slate-900 text-sm border-none focus:outline-blue-600 focus:bg-transparent rounded-lg"
             />
