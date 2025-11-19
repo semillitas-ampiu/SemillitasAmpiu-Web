@@ -3,7 +3,6 @@ import ListarAdministradores from '../pages/administrador/ListarAdministradores.
 import ListarJugadores from '../pages/administrador/ListarJugadores.jsx'
 import Detalles from '../pages/administrador/Detalles.jsx';
 
-import AgregarAdministrador from '../pages/administrador/AgregarAdministrador.jsx';
 import Login from '../pages/administrador/Login.jsx';
 import HomePage from "../pages/Home/HomePage.jsx";
 import PrivateRoute from './PrivateRouter.jsx';
@@ -18,7 +17,6 @@ const AppRouter=()=>{
             <Route path='/logout' element={<Layout><Logout/></Layout>}/>
             <Route path="/administradores" element = {<PrivateRoute> <Layout><ListarAdministradores/></Layout></PrivateRoute> }/>
             <Route path="/jugadores" element = { <PrivateRoute><Layout> <ListarJugadores/></Layout></PrivateRoute> }/>
-            <Route path='/addAdministrador' element = {<PrivateRoute><Layout><AgregarAdministrador/></Layout></PrivateRoute> }/>
             <Route path='/detalles/:id' element = {<PrivateRoute><Layout><Detalles/></Layout></PrivateRoute> }/>
         </Routes>
     );
