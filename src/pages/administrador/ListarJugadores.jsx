@@ -4,7 +4,7 @@ import useDeleteRequest from '../../hooks/useDeleteRequest';
 import usePutRequest from '../../hooks/usePutRequest';
 import { FaInfoCircle } from 'react-icons/fa';
 import { MdUpdate, MdDelete } from 'react-icons/md';
-import ModalActualizarJugador from '../../components/modals/modalActualizarJugador';
+import ModalActualizarJugador from '../../components/modals/ModalActualizarJugador';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
@@ -84,6 +84,9 @@ const ListarJugadores = () => {
       cancelButtonColor: '#6b7280',
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',
+      background: '#0f172a',
+      color: '#e2e8f0',
+      backdrop: 'rgba(0,0,0,0.7)',
     });
 
     if (!result.isConfirmed) return;
