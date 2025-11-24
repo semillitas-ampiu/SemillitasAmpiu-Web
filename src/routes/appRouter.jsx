@@ -8,6 +8,7 @@ import HomePage from "../pages/Home/HomePage.jsx";
 import PrivateRoute from './PrivateRouter.jsx';
 import Layout from '../components/Layout.jsx';
 import Logout from '../pages/administrador/Logout.jsx';
+import AdminLayout from '../components/AdminLayout.jsx';
 
 const AppRouter=()=>{
     return (
@@ -15,9 +16,9 @@ const AppRouter=()=>{
             <Route path='/' element={<Layout><HomePage/></Layout>}/>
             <Route path='/login' element={<Layout><Login/></Layout>}/>
             <Route path='/logout' element={<Layout><Logout/></Layout>}/>
-            <Route path="/administradores" element = {<PrivateRoute> <Layout><ListarAdministradores/></Layout></PrivateRoute> }/>
-            <Route path="/jugadores" element = { <PrivateRoute><Layout> <ListarJugadores/></Layout></PrivateRoute> }/>
-            <Route path='/detalles/:id' element = {<PrivateRoute><Layout><Detalles/></Layout></PrivateRoute> }/>
+            <Route path="/administradores" element = {<PrivateRoute> <AdminLayout><ListarAdministradores/></AdminLayout></PrivateRoute> }/>
+            <Route path="/jugadores" element = { <PrivateRoute><AdminLayout> <ListarJugadores/></AdminLayout></PrivateRoute> }/>
+            <Route path='/detalles/:id' element = {<PrivateRoute><AdminLayout><Detalles/></AdminLayout></PrivateRoute> }/>
         </Routes>
     );
 }
