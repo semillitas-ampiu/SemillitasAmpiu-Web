@@ -11,6 +11,11 @@ const ListarAdministradores = () => {
     getData("administrador");
   }, []);
 
+  const handleAdminCreated = () => {
+    // volver a pedir la lista al backend
+    getData("administrador");
+  };
+
   if (loading)
     return (
       <p className="text-center text-gray-400">cargando Administradores...</p>
@@ -92,6 +97,7 @@ const ListarAdministradores = () => {
       <ModalAgregarAdministrador
         isOpen={mostrarModalAdmin}
         onClose={() => setMostrarModalAdmin(false)}
+        onAdminCreated={handleAdminCreated}
       />
     </div>
   );
