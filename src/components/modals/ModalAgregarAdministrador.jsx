@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import usePostRequest from "../../hooks/usePostRequest";
 import { getApiUrl } from "../../utils/apiConfig";
 
-const ModalAgregarAdministrador = ({ isOpen, onClose }) => {
+const ModalAgregarAdministrador = ({ isOpen, onClose, onAdminCreated }) => {
   const { postData, response, error, loading, clearState } = usePostRequest();
 
   // 1. Estado: Definir solo los campos necesarios (sin password, que se genera en el backend)
@@ -72,6 +72,10 @@ const ModalAgregarAdministrador = ({ isOpen, onClose }) => {
         // 🛑 CLAVE FINAL: Limpia la respuesta para evitar el doble disparo en el siguiente clic.
         clearState();
 
+        if (onAdminCreated) {
+          onAdminCreated(response.data);
+        }
+
         if (onClose) onClose();
       }
       // Lógica de error
@@ -92,7 +96,7 @@ const ModalAgregarAdministrador = ({ isOpen, onClose }) => {
         clearState();
       }
     }
-  }, [response, error, loading, clearState, onClose]);
+  }, [response, error, loading, clearState, onClose, onAdminCreated]);
 
   if (!isOpen) return null;
 
