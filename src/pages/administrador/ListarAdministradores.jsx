@@ -1,14 +1,20 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import useGetRequest from "../../hooks/useGetRequest";
-import { Link } from "react-router-dom";
+import ModalAgregarAdministrador from "../../components/modals/ModalAgregarAdministrador";
 
 const ListarAdministradores = () => {
   const { getData, data: administradores, error, loading } = useGetRequest();
-  console.log(administradores);
+
+  const [mostrarModalAdmin, setMostrarModalAdmin] = useState(false);
 
   useEffect(() => {
     getData("administrador");
   }, []);
+
+  const handleAdminCreated = () => {
+    // volver a pedir la lista al backend
+    getData("administrador");
+  };
 
   if (loading)
     return (
@@ -20,11 +26,12 @@ const ListarAdministradores = () => {
         Error al cargar: {error?.error || "error desconocido"}
       </p>
     );
+
   return (
     <div className="space-y-6 pt-11">
-      <div
-        className={`rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]`}
-      >
+
+
+      <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         {/* Card Header */}
         <div className="px-6 py-5">
           <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
@@ -37,7 +44,7 @@ const ListarAdministradores = () => {
           <div className="space-y-6">
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
               <div className="max-w-full overflow-x-auto">
-                <table className={`min-w-full`}>
+                <table className="min-w-full">
                   {/* Table Header */}
                   <thead className="border-b border-gray-100 dark:border-white/[0.05]">
                     <tr>
@@ -74,17 +81,24 @@ const ListarAdministradores = () => {
                 </table>
               </div>
             </div>
+                <div className="flex justify-end mb-4 px-6">
+                  <button
+                    onClick={() => setMostrarModalAdmin(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                  >
+                    + Agregar Administrador
+                  </button>
+                </div>
           </div>
         </div>
-        <div className="m-6 flex justify-end">
-          <Link
-            to="/addAdministrador"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded"
-          >
-            Agregar Administrador
-          </Link>
-        </div>
       </div>
+
+      {/* Modal */}
+      <ModalAgregarAdministrador
+        isOpen={mostrarModalAdmin}
+        onClose={() => setMostrarModalAdmin(false)}
+        onAdminCreated={handleAdminCreated}
+      />
     </div>
   );
 };

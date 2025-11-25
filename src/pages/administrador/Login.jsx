@@ -5,7 +5,6 @@ import { AuthContext } from "../../context/authContext";
 import { getApiUrl } from "../../utils/apiConfig";
 
 const Login=()=>{
-    console.log("Login Rendered")
     const {login}   = useContext(AuthContext)
     const navigate = useNavigate()
     const location = useLocation()
