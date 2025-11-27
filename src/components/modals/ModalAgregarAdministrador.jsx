@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import usePostRequest from "../../hooks/usePostRequest"; // Asumo que este hook maneja la conversión a JSON
-import { useNavigate } from "react-router-dom";
+import usePostRequest from "../../hooks/usePostRequest";
+import { getApiUrl } from "../../utils/apiConfig";
 
-const AgregarAdministrador = () => {
-  const navigate = useNavigate();
+const ModalAgregarAdministrador = ({ isOpen, onClose, onAdminCreated }) => {
   const { postData, response, error, loading, clearState } = usePostRequest();
 
   // 1. Estado: Definir solo los campos necesarios (sin password, que se genera en el backend)
@@ -42,11 +41,12 @@ const AgregarAdministrador = () => {
     };
 
     // 3. Enviar al endpoint de creación de Jugadores
-    const url = "http://127.0.0.1:8000/api/administrador/";
+    const url = getApiUrl("administrador/");
     await postData(url, payload);
 
     // 4. Lógica de respuesta
   };
+
   useEffect(() => {
     // Ejecuta la lógica solo si NO estamos cargando
     if (!loading) {
@@ -71,6 +71,12 @@ const AgregarAdministrador = () => {
 
         // 🛑 CLAVE FINAL: Limpia la respuesta para evitar el doble disparo en el siguiente clic.
         clearState();
+
+        if (onAdminCreated) {
+          onAdminCreated(response.data);
+        }
+
+        if (onClose) onClose();
       }
       // Lógica de error
       else if (error) {
@@ -90,22 +96,36 @@ const AgregarAdministrador = () => {
         clearState();
       }
     }
-  }, [response, error, loading, clearState]);
+  }, [response, error, loading, clearState, onClose, onAdminCreated]);
+
+  if (!isOpen) return null;
+
   return (
-    <div className="flex justify-center mt-10 ">
-      <div className="space-y-6">
-        <div
-          className={`rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]`}
-        >
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+      {/* Fondo oscuro */}
+      <div
+        className="fixed inset-0 bg-black/70"
+        onClick={onClose}
+      ></div>
+
+      <div className="relative z-[10000] w-full max-w-lg">
+        <div className="rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl">
           {/* Card Header */}
-          <div className="px-6 py-5">
-            <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
+          <div className="px-6 py-5 flex items-center border-b border-slate-700">
+            <h3 className="text-base font-medium text-white flex-1">
               Registrar Nuevo Administrador
             </h3>
+            <button
+              type="button"
+              onClick={onClose}
+              className="ml-2 text-slate-400 hover:text-red-400 text-xl font-bold"
+            >
+              ✕
+            </button>
           </div>
 
           {/* Card Body */}
-          <div className="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+          <div className="p-4 border-t border-slate-800 sm:p-6">
             <div className="space-y-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Campos del Usuario */}
@@ -113,7 +133,7 @@ const AgregarAdministrador = () => {
                 <div>
                   <label
                     htmlFor="first_name"
-                    className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                    className="mb-1.5 block text-sm font-medium text-slate-200"
                   >
                     Nombre
                   </label>
@@ -123,17 +143,18 @@ const AgregarAdministrador = () => {
                       name="first_name"
                       id="first_name"
                       placeholder="Pedro"
-                      className="form-control border rounded p-2 w-full"
+                      className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       value={datos.first_name}
                       onChange={handleChange}
                       required
                     />
                   </div>
                 </div>
+
                 <div className="mt-2">
                   <label
                     htmlFor="last_name"
-                    className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                    className="mb-1.5 block text-sm font-medium text-slate-200"
                   >
                     Apellido
                   </label>
@@ -141,17 +162,18 @@ const AgregarAdministrador = () => {
                     type="text"
                     name="last_name"
                     id="last_name"
-                    className="form-control border rounded p-2 w-full"
+                    className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Perez"
                     value={datos.last_name}
                     onChange={handleChange}
                     required
                   />
                 </div>
+
                 <div className="mt-2">
                   <label
                     htmlFor="email"
-                    className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                    className="mb-1.5 block text-sm font-medium text-slate-200"
                   >
                     Correo Electrónico
                   </label>
@@ -160,16 +182,17 @@ const AgregarAdministrador = () => {
                     name="email"
                     id="email"
                     placeholder="example@gmail.com"
-                    className="form-control border rounded p-2 w-full"
+                    className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={datos.email}
                     onChange={handleChange}
                     required
                   />
                 </div>
+
                 <div className="mt-2">
                   <label
                     htmlFor="fecha_nacimiento"
-                    className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                    className="mb-1.5 block text-sm font-medium text-slate-200"
                   >
                     Fecha de nacimiento
                   </label>
@@ -178,7 +201,7 @@ const AgregarAdministrador = () => {
                       type="date"
                       name="fecha_nacimiento"
                       id="fecha_nacimiento"
-                      className="form-control border rounded p-2 w-full"
+                      className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       value={datos.fecha_nacimiento}
                       onChange={handleChange}
                       required
@@ -188,7 +211,7 @@ const AgregarAdministrador = () => {
 
                 <div className="mt-4">
                   <button
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded w-full"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded w-full disabled:opacity-60"
                     type="submit"
                     disabled={loading}
                   >
@@ -197,7 +220,7 @@ const AgregarAdministrador = () => {
                 </div>
 
                 {/* Indicador de que la contraseña se genera automáticamente */}
-                <p className="text-muted mt-2 text-center text-gray-500">
+                <p className="text-muted mt-2 text-center text-slate-400 text-xs">
                   * La contraseña será generada y enviada al correo electrónico.
                 </p>
               </form>
@@ -209,4 +232,4 @@ const AgregarAdministrador = () => {
   );
 };
 
-export default AgregarAdministrador;
+export default ModalAgregarAdministrador;

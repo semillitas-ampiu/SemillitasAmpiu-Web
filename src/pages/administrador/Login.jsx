@@ -2,14 +2,9 @@ import { useState,useContext,useEffect } from "react";
 
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
-
-
-
-
-const BASE_URL = "https://semillitasampiu-api-production.up.railway.app/api/";
+import { getApiUrl } from "../../utils/apiConfig";
 
 const Login=()=>{
-    console.log("Login Rendered")
     const {login}   = useContext(AuthContext)
     const navigate = useNavigate()
     const location = useLocation()
@@ -34,7 +29,7 @@ const Login=()=>{
     const handleSubmit= async e =>{
         e.preventDefault()
         try {
-            const response = await fetch(`${BASE_URL}token/`,{
+            const response = await fetch(getApiUrl("token/"),{
                 method:'POST',
                 headers:{'Content-Type':'application/json'},
                 body: JSON.stringify(credenciales),
