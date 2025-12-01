@@ -1,40 +1,84 @@
-import React from "react";
+import React, { useEffect } from "react";
 import StatsCard from "./statscard";
 import SalesLineChart from "./GraficaLineas";
 import SalesBarChart from "./GraficaBarras";
 import { UserStar, CaseSensitive, LockKeyhole } from "lucide-react";
+import useGetRequest from "../../hooks/useGetRequest";
 
 export default function Dashboard() {
+  const {
+    getData: getJugadores,
+    data: jugadores,
+    loading: loadingJugadores,
+  } = useGetRequest();
+  const {
+    getData: getPalabras,
+    data: palabras,
+    loading: loadingPalabras,
+  } = useGetRequest();
+  const {
+    getData: getAdmins,
+    data: administradores,
+    loading: loadingAdmins,
+  } = useGetRequest();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    getJugadores("jugador", null, "", controller.signal);
+
+    return () => {
+      controller.abort();
+    };
+  }, [getJugadores]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    getPalabras("palabra", null, "", controller.signal);
+
+    return () => {
+      controller.abort();
+    };
+  }, [getPalabras]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    getAdmins("administrador", null, "", controller.signal);
+
+    return () => {
+      controller.abort();
+    };
+  }, [getAdmins]);
+
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-black-100 min-h-screen">
       {/* TOP STATS */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <StatsCard title="Administradores" value="3" icon={<LockKeyhole />} />
+        <StatsCard
+          title="Administradores"
+          value={loadingAdmins ? "cargando..." : administradores?.length || 0}
+          icon={<LockKeyhole />}
+        />
 
         <StatsCard
           title="Jugadores"
-          value="100"
+          value={loadingJugadores ? "cargando..." : jugadores?.length || 0}
           icon={<UserStar />}
-          trend="+4.35%"
-          trendColor="text-green-500"
         />
         <StatsCard
           title="Palabras"
-          value="100"
+          value={loadingPalabras ? "cargando..." : palabras?.length || 0}
           icon={<CaseSensitive />}
-          trend="+2.59%"
-          trendColor="text-green-500"
         />
       </div>
 
       {/* CHARTS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-4 rounded-xl shadow">
+        <div className="bg-gray-800 p-4 rounded-xl shadow border-white border">
           <h2 className="font-semibold mb-4">Avances De Aprendizaje</h2>
           <SalesLineChart />
         </div>
 
-        <div className="bg-white p-4 rounded-xl shadow">
+        <div className="bg-gray-800 p-4 rounded-xl shadow">
           <h2 className="font-semibold mb-4">Registro Jugadores </h2>
           <SalesBarChart />
         </div>

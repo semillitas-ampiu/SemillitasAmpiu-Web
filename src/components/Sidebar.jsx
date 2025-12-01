@@ -12,7 +12,7 @@ export default function Sidebar({ isCollapsed, onToggle }) {
 
   return (
     <aside
-      className={`fixed top-0 left-0 z-40 bg-gray-800 text-white h-screen flex flex-col transition-[width] duration-300 ease-in-out ${
+      className={`fixed top-0 left-0 z-40 bg-white-800 text-white mr-10 h-screen flex flex-col transition-[width] duration-300 ease-in-out ${
         isCollapsed ? "w-20" : "w-64"
       }`}
     >
@@ -36,7 +36,7 @@ export default function Sidebar({ isCollapsed, onToggle }) {
         {!isCollapsed && (
           <div>
             <h1 className="text-lg font-bold">Semillitas</h1>
-            <p className="text-xs text-gray-400">Panel Admin</p>
+            <p className="text-xs text-white-400">Panel Admin</p>
           </div>
         )}
       </div>
@@ -90,7 +90,7 @@ function SidebarLink({ to, label, icon: Icon, active, isCollapsed }) {
       className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200 ${
         active
           ? "bg-indigo-600 text-white"
-          : "text-gray-400 hover:bg-gray-700 hover:text-white"
+          : "text-white hover:bg-gray-700 hover:text-white"
       } ${isCollapsed ? "justify-center" : ""}`}
       title={isCollapsed ? label : undefined}
     >
