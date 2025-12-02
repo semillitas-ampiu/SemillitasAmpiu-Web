@@ -8,7 +8,7 @@ export default function AdminLayout({ children }) {
         setIsCollapsed((prev) => !prev);
     };
 
-    const contentPadding = isCollapsed ? "pl-20" : "pl-64";
+    const contentPadding = isCollapsed ? "pl-24" : "pl-72";
 
     return (
         <div className="min-h-screen bg-gray-900">

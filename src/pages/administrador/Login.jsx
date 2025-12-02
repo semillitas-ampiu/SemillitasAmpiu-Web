@@ -39,7 +39,7 @@ const Login=()=>{
             const rol= respuesta.user.rol
             console.log(rol)
             if(rol==='Admin'){
-                navigate('/administradores')
+                navigate('/dashboard')
             }
         } catch (error) {
             setMensaje('credenciales invalidas'+error)

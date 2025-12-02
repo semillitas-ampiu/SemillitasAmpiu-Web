@@ -16,7 +16,7 @@ const Header = () => {
             ? "fixed bg-[#1E232E]/90 backdrop-blur-md shadow-lg"
             : "absolute bg-[#1E232E]"
             }`}>
-            <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+            <div className="flex items-center justify-between px-6 py-4">
                 <div className="flex items-center gap-2">
                     <div className="bg-blue-600 w-6 h-6 rounded-sm"></div>
                     <h1 className="text-white font-semibold text-lg">Semillitas Ampiu</h1>
