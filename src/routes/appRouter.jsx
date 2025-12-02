@@ -15,8 +15,8 @@ const AppRouter=()=>{
     return (
         <Routes> 
             <Route path='/' element={<Layout><HomePage/></Layout>}/>
-            <Route path='/login' element={<Layout><Login/></Layout>}/>
-            <Route path='/logout' element={<Layout><Logout/></Layout>}/>
+            <Route path='/login' element={<Login/>}/>
+            <Route path='/logout' element={<Logout/>}/>
             <Route path="/administradores" element = {<PrivateRoute> <AdminLayout><ListarAdministradores/></AdminLayout></PrivateRoute> }/>
             <Route path="/dashboard" element = {<PrivateRoute> <AdminLayout><Dashboard/></AdminLayout></PrivateRoute> }/>
             <Route path="/jugadores" element = { <PrivateRoute><AdminLayout> <ListarJugadores/></AdminLayout></PrivateRoute> }/>

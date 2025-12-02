@@ -5,6 +5,7 @@ import {
   ChevronLeft,
   LogOut,
   ChartNoAxesCombined,
+  HomeIcon
 } from "lucide-react";
 
 export default function Sidebar({ isCollapsed, onToggle }) {
@@ -12,7 +13,7 @@ export default function Sidebar({ isCollapsed, onToggle }) {
 
   return (
     <aside
-      className={`fixed top-0 left-0 z-40 bg-white-800 text-white mr-10 h-screen flex flex-col transition-[width] duration-300 ease-in-out ${
+      className={`fixed top-0 left-0 z-40 bg-white-800 text-white mr-10 h-screen flex flex-col transition-[width] duration-300 ease-in-out border-gray-700 border-r-2 ${
         isCollapsed ? "w-20" : "w-64"
       }`}
     >
@@ -41,8 +42,16 @@ export default function Sidebar({ isCollapsed, onToggle }) {
         )}
       </div>
 
+
       {/* Menú */}
       <nav className="p-4 flex-1 space-y-2">
+      <SidebarLink
+          to="/"
+          label="inicio"
+          icon={HomeIcon}
+          active={location.pathname.startsWith("inicio")}
+          isCollapsed={isCollapsed}
+        />
         <SidebarLink
           to="/dashboard"
           label="Dashboard"

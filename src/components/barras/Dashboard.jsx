@@ -73,13 +73,13 @@ export default function Dashboard() {
 
       {/* CHARTS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-gray-800 p-4 rounded-xl shadow border-white border">
-          <h2 className="font-semibold mb-4">Avances De Aprendizaje</h2>
+        <div className="bg-gray-800 p-4 rounded-xl shadow border-gray-700 border">
+          <h2 className="font-semibold mb-4 text-white">Avances De Aprendizaje</h2>
           <SalesLineChart />
         </div>
 
-        <div className="bg-gray-800 p-4 rounded-xl shadow">
-          <h2 className="font-semibold mb-4">Registro Jugadores </h2>
+        <div className="bg-gray-800 p-4 rounded-xl shadow  border-gray-700 border">
+          <h2 className="font-semibold mb-4 text-white">Registro Jugadores </h2>
           <SalesBarChart />
         </div>
       </div>
