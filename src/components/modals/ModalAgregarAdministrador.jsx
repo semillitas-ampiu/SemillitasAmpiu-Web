@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import usePostRequest from "../../hooks/usePostRequest";
 import { getApiUrl } from "../../utils/apiConfig";
 
@@ -56,10 +57,14 @@ const ModalAgregarAdministrador = ({ isOpen, onClose, onAdminCreated }) => {
         response.mensaje &&
         response.mensaje.includes("creado correctamente")
       ) {
-        // Muestra la alerta
-        alert(
-          `Administrador ${response.data.username} creado con éxito. Las credenciales han sido enviadas a ${response.data.email}.`
-        );
+        Swal.fire({
+          icon: "success",
+          title: "Administrador Creado",
+          text: `Administrador ${response.data.username} creado con éxito. Las credenciales han sido enviadas a ${response.data.email}.`,
+          background: "#1e293b",
+          color: "#ffffff",
+          confirmButtonColor: "#3b82f6",
+        });
 
         // Limpiar formulario
         setDatos({
