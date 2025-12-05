@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import useGetRequest from "../../hooks/useGetRequest";
+import useDeleteRequest from "../../hooks/useDeleteRequest";
 import ModalAgregarAdministrador from "../../components/modals/ModalAgregarAdministrador";
+import { CircleEllipsis } from "lucide-react";
+import Swal from "sweetalert2";
 
 const ListarAdministradores = () => {
+  const { deleteData } = useDeleteRequest();
   const { getData, data: administradores, error, loading } = useGetRequest();
 
   const [mostrarModalAdmin, setMostrarModalAdmin] = useState(false);
+  const [menuAbiertoId, setMenuAbiertoId] = useState(null);
 
   useEffect(() => {
     getData("administrador");
@@ -16,6 +21,51 @@ const ListarAdministradores = () => {
     getData("administrador");
   };
 
+  const toggleMenu = (adminId) => {
+    setMenuAbiertoId(menuAbiertoId === adminId ? null : adminId);
+  };
+
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará el jugador de forma permanente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      background: '#0f172a',
+      color: '#e2e8f0',
+      backdrop: 'rgba(0,0,0,0.7)',
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      await deleteData('administrador', id);
+
+      const controller = new AbortController();
+      getData('administrador', null, '', controller.signal);
+
+      await Swal.fire({
+        title: 'Eliminado',
+        text: 'El jugador ha sido eliminado correctamente.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+      });
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo eliminar el jugador. Inténtalo de nuevo.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+      });
+    }
+  };
+
+    
   if (loading)
     return (
       <p className="text-center text-gray-400">cargando Administradores...</p>
@@ -57,6 +107,9 @@ const ListarAdministradores = () => {
                       <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                         Fecha de Nacimiento
                       </th>
+                      <th className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
+                        Acciones
+                      </th>
                     </tr>
                   </thead>
 
@@ -74,6 +127,30 @@ const ListarAdministradores = () => {
                         </td>
                         <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           {admin.fecha_nacimiento}
+                        </td>
+                        <td className="px-4 py-3 text-center relative text-gray-300">
+                          <button
+                            onClick={() => toggleMenu(admin.id)}
+                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            <CircleEllipsis size={20} />
+                          </button>
+                          {menuAbiertoId === admin.id && (
+                            <div className="absolute left-1/2 -translate-x-full top-full mt-2 w-40 bg-white rounded-md shadow-lg z-10 dark:bg-gray-800 border dark:border-gray-700 text-start">
+                              <ul className="py-1">
+                                <li>
+                                  <button className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600">
+                                    Editar
+                                  </button>
+                                </li>
+                                <li>
+                                  <button  onClick={() => handleDelete(admin.id)} className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    Eliminar
+                                  </button>
+                                </li>
+                              </ul>
+                            </div>
+                          )}
                         </td>
                       </tr>
                     ))}
