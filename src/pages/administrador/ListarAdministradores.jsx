@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useGetRequest from "../../hooks/useGetRequest";
 import useDeleteRequest from "../../hooks/useDeleteRequest";
 import ModalAgregarAdministrador from "../../components/modals/ModalAgregarAdministrador";
+import ModalActualizarAdministrador from "../../components/modals/ModalActualizarAdministrador";
 import { CircleEllipsis } from "lucide-react";
 import Swal from "sweetalert2";
 
@@ -11,13 +12,18 @@ const ListarAdministradores = () => {
 
   const [mostrarModalAdmin, setMostrarModalAdmin] = useState(false);
   const [menuAbiertoId, setMenuAbiertoId] = useState(null);
+  const [mostrarModalEditar, setMostrarModalEditar] = useState(false);
+  const [adminSeleccionado, setAdminSeleccionado] = useState(null);
 
   useEffect(() => {
     getData("administrador");
   }, []);
 
   const handleAdminCreated = () => {
-    // volver a pedir la lista al backend
+    getData("administrador");
+  };
+
+  const handleAdminUpdated = () => {
     getData("administrador");
   };
 
@@ -25,10 +31,16 @@ const ListarAdministradores = () => {
     setMenuAbiertoId(menuAbiertoId === adminId ? null : adminId);
   };
 
+  const handleOpenEditar = (admin) => {
+    setAdminSeleccionado(admin);
+    setMostrarModalEditar(true);
+    setMenuAbiertoId(null);
+  };
+
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: '¿Estás seguro?',
-      text: 'Esta acción eliminará el jugador de forma permanente.',
+      text: 'Esta acción eliminará el administrador de forma permanente.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
@@ -49,23 +61,30 @@ const ListarAdministradores = () => {
       getData('administrador', null, '', controller.signal);
 
       await Swal.fire({
+        toast: true,
+        position: 'top-end',
         title: 'Eliminado',
-        text: 'El jugador ha sido eliminado correctamente.',
+        text: 'El administrador ha sido eliminado correctamente.',
         icon: 'success',
-        confirmButtonText: 'Aceptar',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
       });
-    } catch (err) {
+    } catch (err) { 
       console.error(err);
       Swal.fire({
+        toast: true,
+        position: 'top-end',
         title: 'Error',
-        text: 'No se pudo eliminar el jugador. Inténtalo de nuevo.',
+        text: 'No se pudo eliminar el administrador. Inténtalo de nuevo.',
         icon: 'error',
-        confirmButtonText: 'Aceptar',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
       });
     }
   };
 
-    
   if (loading)
     return (
       <p className="text-center text-gray-400">cargando Administradores...</p>
@@ -79,8 +98,6 @@ const ListarAdministradores = () => {
 
   return (
     <div className="space-y-6 pt-11">
-
-
       <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         {/* Card Header */}
         <div className="px-6 py-5">
@@ -139,12 +156,18 @@ const ListarAdministradores = () => {
                             <div className="absolute left-1/2 -translate-x-full top-full mt-2 w-40 bg-white rounded-md shadow-lg z-10 dark:bg-gray-800 border dark:border-gray-700 text-start">
                               <ul className="py-1">
                                 <li>
-                                  <button className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600">
+                                  <button
+                                    onClick={() => handleOpenEditar(admin)}
+                                    className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
+                                  >
                                     Editar
                                   </button>
                                 </li>
                                 <li>
-                                  <button  onClick={() => handleDelete(admin.id)} className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600">
+                                  <button
+                                    onClick={() => handleDelete(admin.id)}
+                                    className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                  >
                                     Eliminar
                                   </button>
                                 </li>
@@ -158,23 +181,31 @@ const ListarAdministradores = () => {
                 </table>
               </div>
             </div>
-                <div className="flex justify-end mb-4 px-6">
-                  <button
-                    onClick={() => setMostrarModalAdmin(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-                  >
-                    + Agregar Administrador
-                  </button>
-                </div>
+            <div className="flex justify-end mb-4 px-6">
+              <button
+                onClick={() => setMostrarModalAdmin(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+              >
+                + Agregar Administrador
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Modal Agregar */}
       <ModalAgregarAdministrador
         isOpen={mostrarModalAdmin}
         onClose={() => setMostrarModalAdmin(false)}
         onAdminCreated={handleAdminCreated}
+      />
+
+      {/* Modal Editar */}
+      <ModalActualizarAdministrador
+        isOpen={mostrarModalEditar}
+        onClose={() => setMostrarModalEditar(false)}
+        admin={adminSeleccionado}
+        onAdminUpdated={handleAdminUpdated}
       />
     </div>
   );

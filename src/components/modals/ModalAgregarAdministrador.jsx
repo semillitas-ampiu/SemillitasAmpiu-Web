@@ -58,12 +58,14 @@ const ModalAgregarAdministrador = ({ isOpen, onClose, onAdminCreated }) => {
         response.mensaje.includes("creado correctamente")
       ) {
         Swal.fire({
+          toast: true,
+          position: "top-end",
           icon: "success",
           title: "Administrador Creado",
           text: `Administrador ${response.data.username} creado con éxito. Las credenciales han sido enviadas a ${response.data.email}.`,
-          background: "#1e293b",
-          color: "#ffffff",
-          confirmButtonColor: "#3b82f6",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
         });
 
         // Limpiar formulario
