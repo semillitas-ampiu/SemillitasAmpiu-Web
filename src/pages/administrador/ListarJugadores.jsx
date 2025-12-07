@@ -58,18 +58,26 @@ const ListarJugadores = () => {
       setJugadorSeleccionado(null);
 
       await Swal.fire({
+        toast: true,
+        position: 'top-end',
         title: 'Actualizado',
         text: 'El jugador se actualizó correctamente.',
         icon: 'success',
-        confirmButtonText: 'Aceptar',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
       });
     } catch (err) {
       console.error(err);
       Swal.fire({
+        toast: true,
+        position: 'top-end',
         title: 'Error',
         text: 'No se pudo actualizar el jugador.',
         icon: 'error',
-        confirmButtonText: 'Aceptar',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
       });
     }
   };
@@ -98,18 +106,26 @@ const ListarJugadores = () => {
       getData('jugador', null, '', controller.signal);
 
       await Swal.fire({
+        toast: true,
+        position: 'top-end',
         title: 'Eliminado',
         text: 'El jugador ha sido eliminado correctamente.',
         icon: 'success',
-        confirmButtonText: 'Aceptar',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
       });
     } catch (err) {
       console.error(err);
       Swal.fire({
+        toast: true,
+        position: 'top-end',
         title: 'Error',
         text: 'No se pudo eliminar el jugador. Inténtalo de nuevo.',
         icon: 'error',
-        confirmButtonText: 'Aceptar',
+        showConfirmButton: true,
+        timer: 3000,
+        timerProgressBar: true,
       });
     }
   };
