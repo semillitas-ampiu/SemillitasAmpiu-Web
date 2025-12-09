@@ -9,7 +9,7 @@ import PrivateRoute from './PrivateRouter.jsx';
 import Layout from '../components/Layout.jsx';
 import Logout from '../pages/administrador/Logout.jsx';
 import AdminLayout from '../components/AdminLayout.jsx';
-import Dashboard from '../components/barras/Dashboard.jsx';
+import Dashboard from '../pages/administrador/Dashboard.jsx';
 
 const AppRouter=()=>{
     return (
