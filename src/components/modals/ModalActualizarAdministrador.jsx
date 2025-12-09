@@ -67,90 +67,141 @@ const ModalActualizarAdministrador = ({ isOpen, onClose, admin, onAdminUpdated }
     if (!isOpen || !admin) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">Actualizar administrador</h2>
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+        {/* Fondo oscuro */}
+        <div
+            className="fixed inset-0 bg-black/70"
+            onClick={onClose}
+        ></div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-                <label className="block text-sm font-medium mb-1">Nombre</label>
-                <input
-                type="text"
-                name="first_name"
-                value={datos.first_name}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2 text-sm"
-                required
-                />
-            </div>
-
-            <div>
-                <label className="block text-sm font-medium mb-1">Apellido</label>
-                <input
-                type="text"
-                name="last_name"
-                value={datos.last_name}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2 text-sm"
-                required
-                />
-            </div>
-
-            <div>
-                <label className="block text-sm font-medium mb-1">Correo electrónico</label>
-                <input
-                type="email"
-                name="email"
-                value={datos.email}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2 text-sm"
-                required
-                />
-            </div>
-
-            <div>
-                <label className="block text-sm font-medium mb-1">Fecha de nacimiento</label>
-                <input
-                type="date"
-                name="fecha_nacimiento"
-                value={datos.fecha_nacimiento}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2 text-sm"
-                />
-            </div>
-
-            {error && (
-                <p className="text-red-500 text-sm">
-                {typeof error === "string"
-                    ? error
-                    : error.error || "Error al actualizar el administrador"}
-                </p>
-            )}
-
-            <div className="flex justify-end gap-2 pt-2">
+        <div className="relative z-[10000] w-full max-w-lg">
+            <div className="rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl">
+            {/* Card Header */}
+            <div className="px-6 py-5 flex items-center border-b border-slate-700">
+                <h3 className="text-base font-medium text-white flex-1">
+                Actualizar Administrador
+                </h3>
                 <button
                 type="button"
-                onClick={() => {
-                    if (clearState) clearState();
-                    onClose();
-                }}
-                className="px-4 py-2 text-sm border rounded"
-                disabled={loading}
+                onClick={onClose}
+                className="ml-2 text-slate-400 hover:text-red-400 text-xl font-bold"
                 >
-                Cancelar
-                </button>
-                <button
-                type="submit"
-                className="px-4 py-2 text-sm rounded bg-blue-600 text-white disabled:opacity-60"
-                disabled={loading}
-                >
-                {loading ? "Guardando..." : "Guardar cambios"}
+                ✕
                 </button>
             </div>
-            </form>
+
+            {/* Card Body */}
+            <div className="p-4 border-t border-slate-800 sm:p-6">
+                <div className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                    <label
+                        htmlFor="first_name"
+                        className="mb-1.5 block text-sm font-medium text-slate-200"
+                    >
+                        Nombre
+                    </label>
+                    <div className="relative">
+                        <input
+                        type="text"
+                        name="first_name"
+                        id="first_name"
+                        placeholder="Pedro"
+                        className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={datos.first_name}
+                        onChange={handleChange}
+                        required
+                        />
+                    </div>
+                    </div>
+
+                    <div className="mt-2">
+                    <label
+                        htmlFor="last_name"
+                        className="mb-1.5 block text-sm font-medium text-slate-200"
+                    >
+                        Apellido
+                    </label>
+                    <input
+                        type="text"
+                        name="last_name"
+                        id="last_name"
+                        className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Perez"
+                        value={datos.last_name}
+                        onChange={handleChange}
+                        required
+                    />
+                    </div>
+
+                    <div className="mt-2">
+                    <label
+                        htmlFor="email"
+                        className="mb-1.5 block text-sm font-medium text-slate-200"
+                    >
+                        Correo Electrónico
+                    </label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder="example@gmail.com"
+                        className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={datos.email}
+                        onChange={handleChange}
+                        required
+                    />
+                    </div>
+
+                    <div className="mt-2">
+                    <label
+                        htmlFor="fecha_nacimiento"
+                        className="mb-1.5 block text-sm font-medium text-slate-200"
+                    >
+                        Fecha de nacimiento
+                    </label>
+                    <div className="relative">
+                        <input
+                        type="date"
+                        name="fecha_nacimiento"
+                        id="fecha_nacimiento"
+                        className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={datos.fecha_nacimiento}
+                        onChange={handleChange}
+                        required
+                        />
+                    </div>
+                    </div>
+
+                    {error && (
+                    <p className="text-red-400 text-xs">
+                        {typeof error === "string"
+                        ? error
+                        : error.error || "Error al actualizar el administrador"}
+                    </p>
+                    )}
+
+                    <div className="mt-4">
+                    <button
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded w-full disabled:opacity-60"
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading ? "Guardando..." : "Actualizar Administrador"}
+                    </button>
+                    </div>
+
+                    <p className="text-muted mt-2 text-center text-slate-400 text-xs">
+                    * La contraseña no se modifica en esta actualización.
+                    </p>
+                </form>
+                </div>
+            </div>
+            </div>
         </div>
         </div>
     );
 };
+
 
 export default ModalActualizarAdministrador;
