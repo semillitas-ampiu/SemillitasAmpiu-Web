@@ -8,6 +8,7 @@ const Login = () => {
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
+    const [loadingBtn, setLoadingBtn] = useState(false);
 
     const [mensaje, setMensaje] = useState("");
     const [credenciales, setCredenciales] = useState({
@@ -34,6 +35,7 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoadingBtn(true);
         try {
         const response = await fetch(getApiUrl("token/"), {
             method: "POST",
@@ -54,6 +56,8 @@ const Login = () => {
         setTimeout(() => {
             setMensaje("");
         }, 7200);
+        }finally {
+            setLoadingBtn(false);
         }
     };
 
@@ -146,11 +150,15 @@ const Login = () => {
 
                 {/* SUBMIT BUTTON */}
                 <button
-                type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-md transition"
-                >
-                Sign In
+                    type="submit"
+                    disabled={loadingBtn}
+                    className={`w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-md transition ${
+                        loadingBtn ? "opacity-70 cursor-not-allowed" : ""
+                    }`}
+                    >
+                    {loadingBtn ? "Cargando..." : "Sign In"}
                 </button>
+
             </form>
 
             {/* MENSAJE */}
