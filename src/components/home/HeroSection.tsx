@@ -52,7 +52,7 @@ const Hero: FC = () => {
                     rel="noopener noreferrer"
                     className="rounded-sm bg-blue-600 px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-blue-700 shadow-lg hover:shadow-xl"
                   >
-                    🎮 Descargar juego (APK)
+                    Descargar juego (APK)
                   </a>
                   <a
                     href="#about"

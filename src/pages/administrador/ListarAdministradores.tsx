@@ -1,4 +1,11 @@
-import { type MouseEvent, type ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  type MouseEvent,
+  type ReactElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { CircleEllipsis } from 'lucide-react';
 import Swal from 'sweetalert2';
 
@@ -15,11 +22,17 @@ interface MenuPosition {
 
 const ListarAdministradores = (): ReactElement => {
   const { deleteData } = useDeleteRequest();
-  const { getData, data: administradores, error, loading } = useGetRequest<Administrador>();
+  const {
+    getData,
+    data: administradores,
+    error,
+    loading,
+  } = useGetRequest<Administrador>();
 
   const [mostrarModalAdmin, setMostrarModalAdmin] = useState<boolean>(false);
   const [mostrarModalEditar, setMostrarModalEditar] = useState<boolean>(false);
-  const [adminSeleccionado, setAdminSeleccionado] = useState<Administrador | null>(null);
+  const [adminSeleccionado, setAdminSeleccionado] =
+    useState<Administrador | null>(null);
 
   // Estados del menú
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
@@ -49,12 +62,15 @@ const ListarAdministradores = (): ReactElement => {
   };
 
   // Abrir menú: hacia la izquierda y pegado al botón
-  const abrirMenu = (adminId: number, event: MouseEvent<HTMLButtonElement>): void => {
+  const abrirMenu = (
+    adminId: number,
+    event: MouseEvent<HTMLButtonElement>
+  ): void => {
     const rect = event.currentTarget.getBoundingClientRect();
     const scrollY = window.scrollY || window.pageYOffset;
 
     setMenuPos({
-      x: rect.left - 170,        // hacia la izquierda (≈ ancho del menú)
+      x: rect.left - 170, // hacia la izquierda (≈ ancho del menú)
       y: rect.top + scrollY - 5, // un poco más arriba, pegado al botón
     });
 
@@ -144,58 +160,58 @@ const ListarAdministradores = (): ReactElement => {
 
   return (
     <div className="space-y-6 pt-11">
-      <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="rounded-2xl border border-gray-800 bg-white/[0.03]">
         {/* Card Header */}
         <div className="px-6 py-5">
-          <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
+          <h3 className="text-base font-medium text-white/90">
             Lista de Administradores
           </h3>
         </div>
 
         {/* Card Body */}
-        <div className="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+        <div className="p-4 border-t border-gray-800 sm:p-6">
           <div className="space-y-6">
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+            <div className="overflow-hidden rounded-xl border border-white/[0.05] bg-white/[0.03]">
               <div className="max-w-full overflow-x-auto">
                 <table className="min-w-full">
                   {/* Table Header */}
-                  <thead className="border-b border-gray-100 dark:border-white/[0.05]">
+                  <thead className="border-b border-white/[0.05]">
                     <tr>
-                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      <th className="px-5 py-3 font-medium text-gray-400 text-start text-theme-xs">
                         Nombres y Apellidos
                       </th>
-                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      <th className="px-5 py-3 font-medium text-gray-400 text-start text-theme-xs">
                         Correo
                       </th>
-                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      <th className="px-5 py-3 font-medium text-gray-400 text-start text-theme-xs">
                         Fecha de Nacimiento
                       </th>
-                      <th className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
+                      <th className="px-5 py-3 font-medium text-gray-400 text-center text-theme-xs">
                         Acciones
                       </th>
                     </tr>
                   </thead>
 
                   {/* Table Body */}
-                  <tbody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                  <tbody className="divide-y divide-white/[0.05]">
                     {administradores.map((admin) => (
                       <tr key={admin.id}>
                         <td className="px-5 py-4 sm:px-6 text-start">
-                          <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                          <span className="block font-medium text-white/90 text-theme-sm">
                             {admin.first_name} {admin.last_name}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <td className="px-4 py-3 text-gray-400 text-start text-theme-sm">
                           {admin.email}
                         </td>
-                        <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <td className="px-4 py-3 text-gray-400 text-start text-theme-sm">
                           {admin.fecha_nacimiento}
                         </td>
                         <td className="px-4 py-3 text-center relative text-gray-300">
                           <button
                             type="button"
                             onClick={(e) => abrirMenu(admin.id, e)}
-                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="p-2 rounded-full hover:bg-gray-700"
                           >
                             <CircleEllipsis size={20} />
                           </button>
@@ -210,7 +226,7 @@ const ListarAdministradores = (): ReactElement => {
               <button
                 type="button"
                 onClick={() => setMostrarModalAdmin(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                className="bg-indigo-600 hover:bg-gray-700 text-white font-medium px-4 py-2 rounded-lg"
               >
                 + Agregar Administrador
               </button>
@@ -223,7 +239,7 @@ const ListarAdministradores = (): ReactElement => {
       {menuVisible && (
         <div
           ref={menuRef}
-          className="fixed z-[9999] w-40 bg-white rounded-md shadow-lg dark:bg-gray-800 border dark:border-gray-700 text-start"
+          className="fixed z-[9999] w-40 bg-gray-800 rounded-md shadow-lg border border-gray-700 text-start"
           style={{ top: menuPos.y, left: menuPos.x }}
         >
           <ul className="py-1">
@@ -231,10 +247,12 @@ const ListarAdministradores = (): ReactElement => {
               <button
                 type="button"
                 onClick={() => {
-                  const admin = administradores.find((a) => a.id === menuAdminId);
+                  const admin = administradores.find(
+                    (a) => a.id === menuAdminId
+                  );
                   if (admin) handleOpenEditar(admin);
                 }}
-                className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
+                className="w-full text-left block px-4 py-2 text-sm text-gray-200 hover:bg-gray-600"
               >
                 Actualizar
               </button>
@@ -245,7 +263,7 @@ const ListarAdministradores = (): ReactElement => {
                 onClick={() => {
                   if (menuAdminId !== null) handleDelete(menuAdminId);
                 }}
-                className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
+                className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-600"
               >
                 Eliminar
               </button>

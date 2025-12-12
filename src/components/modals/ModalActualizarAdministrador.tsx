@@ -1,25 +1,32 @@
-import { type ChangeEvent, type FC, type FormEvent, useEffect, useState } from 'react';
+import {
+  type ChangeEvent,
+  type FC,
+  type FormEvent,
+  useEffect,
+  useState,
+} from 'react';
 import Swal from 'sweetalert2';
 
 import usePutRequest from '@/hooks/usePutRequest';
-import type { 
-  Administrador, 
-  ApiError, 
-  FormDatosAdministrador, 
-  ModalActualizarAdministradorProps 
+import type {
+  Administrador,
+  ApiError,
+  FormDatosAdministrador,
+  ModalActualizarAdministradorProps,
 } from '@/types';
 
 /**
  * Modal para actualizar los datos de un administrador existente
  * La contraseña NO se modifica en esta actualización
  */
-const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({ 
-  isOpen, 
-  onClose, 
-  admin, 
-  onAdminUpdated 
+const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({
+  isOpen,
+  onClose,
+  admin,
+  onAdminUpdated,
 }) => {
-  const { putData, response, error, loading, clearState } = usePutRequest<Administrador>();
+  const { putData, response, error, loading, clearState } =
+    usePutRequest<Administrador>();
 
   const [datos, setDatos] = useState<FormDatosAdministrador>({
     fecha_nacimiento: '',
@@ -101,29 +108,29 @@ const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({
       />
 
       <div className="relative z-[10000] w-full max-w-lg">
-        <div className="rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl">
+        <div className="rounded-2xl border border-gray-800 bg-gray-900 shadow-2xl">
           {/* Card Header */}
-          <div className="px-6 py-5 flex items-center border-b border-slate-700">
+          <div className="px-6 py-5 flex items-center border-b border-gray-800">
             <h3 className="text-base font-medium text-white flex-1">
               Actualizar Administrador
             </h3>
             <button
               type="button"
               onClick={onClose}
-              className="ml-2 text-slate-400 hover:text-red-400 text-xl font-bold"
+              className="ml-2 text-gray-400 hover:text-red-400 text-xl font-bold"
             >
               ✕
             </button>
           </div>
 
           {/* Card Body */}
-          <div className="p-4 border-t border-slate-800 sm:p-6">
+          <div className="p-4 border-t border-gray-800 sm:p-6">
             <div className="space-y-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label
                     htmlFor="first_name"
-                    className="mb-1.5 block text-sm font-medium text-slate-200"
+                    className="mb-1.5 block text-sm font-medium text-white/90"
                   >
                     Nombre
                   </label>
@@ -133,7 +140,7 @@ const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({
                       name="first_name"
                       id="first_name"
                       placeholder="Pedro"
-                      className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="form-control border border-gray-700 rounded p-2 w-full bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       value={datos.first_name}
                       onChange={handleChange}
                       required
@@ -144,7 +151,7 @@ const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({
                 <div className="mt-2">
                   <label
                     htmlFor="last_name"
-                    className="mb-1.5 block text-sm font-medium text-slate-200"
+                    className="mb-1.5 block text-sm font-medium text-white/90"
                   >
                     Apellido
                   </label>
@@ -152,7 +159,7 @@ const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({
                     type="text"
                     name="last_name"
                     id="last_name"
-                    className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="form-control border border-gray-700 rounded p-2 w-full bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Perez"
                     value={datos.last_name}
                     onChange={handleChange}
@@ -163,7 +170,7 @@ const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({
                 <div className="mt-2">
                   <label
                     htmlFor="email"
-                    className="mb-1.5 block text-sm font-medium text-slate-200"
+                    className="mb-1.5 block text-sm font-medium text-white/90"
                   >
                     Correo Electrónico
                   </label>
@@ -172,7 +179,7 @@ const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({
                     name="email"
                     id="email"
                     placeholder="example@gmail.com"
-                    className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="form-control border border-gray-700 rounded p-2 w-full bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={datos.email}
                     onChange={handleChange}
                     required
@@ -182,7 +189,7 @@ const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({
                 <div className="mt-2">
                   <label
                     htmlFor="fecha_nacimiento"
-                    className="mb-1.5 block text-sm font-medium text-slate-200"
+                    className="mb-1.5 block text-sm font-medium text-white/90"
                   >
                     Fecha de nacimiento
                   </label>
@@ -191,7 +198,7 @@ const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({
                       type="date"
                       name="fecha_nacimiento"
                       id="fecha_nacimiento"
-                      className="form-control border border-slate-600 rounded p-2 w-full bg-slate-800 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="form-control border border-gray-700 rounded p-2 w-full bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                       value={datos.fecha_nacimiento}
                       onChange={handleChange}
                       required
@@ -215,7 +222,7 @@ const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({
                   </button>
                 </div>
 
-                <p className="text-muted mt-2 text-center text-slate-400 text-xs">
+                <p className="text-muted mt-2 text-center text-gray-400 text-xs">
                   * La contraseña no se modifica en esta actualización.
                 </p>
               </form>

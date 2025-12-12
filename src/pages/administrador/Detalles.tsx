@@ -51,51 +51,49 @@ export default function Detalles(): ReactElement {
 
   return (
     <div className="space-y-6 pt-11">
-      <div
-        className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
-      >
+      <div className="rounded-2xl border border-gray-800 bg-white/[0.03]">
         <div className="px-6 py-5">
-          <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
+          <h3 className="text-base font-medium text-white/90">
             Palabras recolectadas del jugador {id}
           </h3>
         </div>
 
-        <div className="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+        <div className="p-4 border-t border-gray-800 sm:p-6">
           <div className="space-y-6">
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+            <div className="overflow-hidden rounded-xl border border-white/[0.05] bg-white/[0.03]">
               <div className="max-w-full overflow-x-auto">
                 <table className="min-w-full">
-                  <thead className="border-b border-gray-100 dark:border-white/[0.05]">
+                  <thead className="border-b border-white/[0.05]">
                     <tr>
-                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      <th className="px-5 py-3 font-medium text-gray-400 text-start text-theme-xs">
                         Palabra en ampiu
                       </th>
-                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      <th className="px-5 py-3 font-medium text-gray-400 text-start text-theme-xs">
                         Palabra en español
                       </th>
-                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      <th className="px-5 py-3 font-medium text-gray-400 text-start text-theme-xs">
                         Nivel
                       </th>
-                      <th className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                      <th className="px-5 py-3 font-medium text-gray-400 text-start text-theme-xs">
                         Fecha de recolección
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                  <tbody className="divide-y divide-white/[0.05]">
                     {recolecciones.map((item) => (
                       <tr key={item.id}>
                         <td className="px-5 py-4 sm:px-6 text-start">
-                          <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                          <span className="block font-medium text-white/90 text-theme-sm">
                             {item.palabra_data.pal_ampiu}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <td className="px-4 py-3 text-gray-400 text-start text-theme-sm">
                           {item.palabra_data.pal_español}
                         </td>
-                        <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <td className="px-4 py-3 text-gray-400 text-start text-theme-sm">
                           {item.palabra_data.nivel}
                         </td>
-                        <td className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <td className="px-4 py-3 text-gray-400 text-start text-theme-sm">
                           {new Date(item.fecha_recogida).toLocaleDateString(
                             'es-CO'
                           )}

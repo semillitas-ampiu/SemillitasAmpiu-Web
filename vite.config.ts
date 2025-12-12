@@ -1,6 +1,6 @@
-import path from 'node:path'
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import path from 'node:path';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -16,4 +16,23 @@ export default defineConfig({
       '@types': path.resolve(__dirname, './src/types'),
     },
   },
-})
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // React core
+          'react-vendor': ['react', 'react-dom'],
+          // React Router
+          router: ['react-router-dom'],
+          // Gráficos (librería grande)
+          charts: ['recharts'],
+          // UI libraries
+          'ui-vendor': ['sweetalert2', 'lucide-react', 'react-icons'],
+          // Carousels
+          carousel: ['react-slick', 'slick-carousel'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
+});
