@@ -13,18 +13,11 @@ interface LayoutProps {
  */
 const Layout = ({ children }: LayoutProps): ReactNode => {
   return (
-    <div className="layout-container min-h-screen flex flex-col">
-      {/* HEADER y Navegación fijos */}
+    <>
       <Header />
-      
-      {/* CONTENIDO DINÁMICO (la página) */}
-      <main className="main-content flex-grow p-4">
-        {children}
-      </main>
-
-      {/* FOOTER fijo */}
+      <main className="min-h-screen">{children}</main>
       <Footer />
-    </div>
+    </>
   );
 };
 

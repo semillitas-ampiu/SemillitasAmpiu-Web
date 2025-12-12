@@ -13,7 +13,7 @@ const HomePage: FC = () => {
   useScrollToTop();
 
   return (
-    <main className="w-full text-white bg-gradient-to-br from-blue-500 via-indigo-600 to-blue-800">
+    <main>
       <Hero />
       <About />
       <HowItWorks />

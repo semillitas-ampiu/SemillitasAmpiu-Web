@@ -4,7 +4,7 @@ import AppRouter from '@/routes/appRouter';
 
 function App(): ReactElement {
   return (
-    <div className="bg-gray-900 min-h-screen mt-4">
+    <div className="bg-gray-900 min-h-screen">
       <AppRouter />
     </div>
   );

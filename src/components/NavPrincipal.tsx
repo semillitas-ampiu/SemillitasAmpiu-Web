@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { AuthContext } from '@/context/authContext';
 import type { AuthContextValue, NavPrincipalProps } from '@/types';
@@ -12,62 +12,81 @@ import type { AuthContextValue, NavPrincipalProps } from '@/types';
 const NavPrincipal = ({ navbarOpen }: NavPrincipalProps): ReactNode => {
   const authContext = useContext(AuthContext);
   const { usuario } = authContext as AuthContextValue;
+  const location = useLocation();
 
   return (
     <nav
-      className={`${
-        navbarOpen ? 'block' : 'hidden'
-      } absolute top-full right-0 w-full bg-[#1E232E] text-gray-300 lg:static lg:block lg:w-auto lg:bg-transparent`}
+      id="navbarCollapse"
+      className={`navbar absolute right-0 z-30 w-[250px] rounded border-[.5px] border-body-color/50 px-6 py-4 duration-300 lg:visible lg:static lg:w-auto lg:border-none lg:bg-transparent lg:p-0 lg:opacity-100 ${
+        navbarOpen
+          ? 'visibility top-full opacity-100 bg-gray-800'
+          : 'invisible top-[120%] opacity-0'
+      }`}
     >
-      <ul className="flex flex-col lg:flex-row lg:space-x-8 px-6 lg:px-0">
-        {/* Acciones del usuario */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:space-x-8">
         {usuario ? (
           <>
-            <li>
-              <Link
-                to="/dashboard"
-                className="text-white hover:text-gray-300 font-semibold"
-              >
-                Dashboard
-              </Link>
-            </li>
+            <ul className="flex flex-col lg:flex-row lg:space-x-8">
+              <li className="group relative">
+                <Link
+                  to="/dashboard"
+                  className={`flex py-2 text-base lg:inline-flex lg:px-0 lg:py-6 ${
+                    location.pathname === '/dashboard'
+                      ? 'text-blue-400'
+                      : 'text-blue-100 hover:text-white'
+                  }`}
+                >
+                  Dashboard
+                </Link>
+              </li>
 
-            <li className="mt-4 lg:mt-0">
-              <Link
-                to="/administradores"
-                className="text-white hover:text-gray-300 font-semibold"
-              >
-                Administradores
-              </Link>
-            </li>
-            <li className="mt-4 lg:mt-0">
-              <Link
-                to="/jugadores"
-                className="text-white hover:text-gray-300 font-semibold"
-              >
-                Jugadores
-              </Link>
-            </li>
-            <li className="mt-4 lg:mt-0">
+              <li className="group relative">
+                <Link
+                  to="/administradores"
+                  className={`flex py-2 text-base lg:inline-flex lg:px-0 lg:py-6 ${
+                    location.pathname === '/administradores'
+                      ? 'text-blue-400'
+                      : 'text-blue-100 hover:text-white'
+                  }`}
+                >
+                  Administradores
+                </Link>
+              </li>
+
+              <li className="group relative">
+                <Link
+                  to="/jugadores"
+                  className={`flex py-2 text-base lg:inline-flex lg:px-0 lg:py-6 ${
+                    location.pathname === '/jugadores'
+                      ? 'text-blue-400'
+                      : 'text-blue-100 hover:text-white'
+                  }`}
+                >
+                  Jugadores
+                </Link>
+              </li>
+            </ul>
+
+            <div className="mt-4 lg:mt-0">
               <Link
                 to="/logout"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded"
+                className="ease-in-up shadow-btn hover:shadow-btn-hover rounded-sm bg-blue-600 px-6 py-2.5 text-base font-medium text-white transition duration-300 hover:bg-blue-700 inline-block"
               >
                 Cerrar sesión
               </Link>
-            </li>
+            </div>
           </>
         ) : (
-          <li className="mt-2 lg:mt-0">
+          <div>
             <Link
               to="/login"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded"
+              className="ease-in-up shadow-btn hover:shadow-btn-hover rounded-sm bg-blue-600 px-6 py-2.5 text-base font-medium text-white transition duration-300 hover:bg-blue-700 inline-block"
             >
               Iniciar sesión
             </Link>
-          </li>
+          </div>
         )}
-      </ul>
+      </div>
     </nav>
   );
 };

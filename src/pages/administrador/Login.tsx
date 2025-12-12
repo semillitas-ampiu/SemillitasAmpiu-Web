@@ -1,4 +1,11 @@
-import { type ChangeEvent, type FC, type FormEvent, useContext, useEffect, useState } from 'react';
+import {
+  type ChangeEvent,
+  type FC,
+  type FormEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 
@@ -59,7 +66,11 @@ const AdminLogin: FC = () => {
         navigate('/dashboard');
       }
     } catch (error) {
-      setMensaje(`credenciales invalidas${error instanceof Error ? `: ${error.message}` : ''}`);
+      setMensaje(
+        `credenciales invalidas${
+          error instanceof Error ? `: ${error.message}` : ''
+        }`
+      );
       setTimeout(() => {
         setMensaje('');
       }, 7200);
@@ -69,115 +80,112 @@ const AdminLogin: FC = () => {
   };
 
   return (
-    <main className="min-h-screen flex flex-col md:flex-row">
-      {/* ======================= SECCIÓN IZQUIERDA ======================= */}
-      <section
-        aria-label="Formulario de inicio de sesión"
-        className="flex flex-col justify-center w-full md:w-1/2 px-8 py-12 bg-white"
-      >
-        <header className="max-w-md w-full mx-auto mb-6">
+    <main className="min-h-screen flex flex-col md:flex-row bg-white dark:bg-gray-900">
+      {/* ======================= SECCIÓN FORMULARIO ======================= */}
+      <div className="flex flex-col flex-1">
+        <div className="w-full max-w-md pt-10 mx-auto">
           <Link
             to="/"
-            className="text-sm text-gray-500 hover:text-indigo-600 flex items-center gap-1"
+            className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
           >
-            <span aria-hidden="true">←</span> Volver al inicio
+            <span className="mr-1">←</span>
+            Volver al inicio
           </Link>
-        </header>
+        </div>
+        <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
+          <div>
+            <div className="mb-5 sm:mb-8">
+              <h1 className="mb-2 font-semibold text-gray-800 text-3xl dark:text-white/90 sm:text-4xl">
+                Iniciar Sesión
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Ingresa tus credenciales para iniciar sesión
+              </p>
+            </div>
 
-        <article className="max-w-md w-full mx-auto space-y-6">
-          <header>
-            <h1 className="text-3xl font-semibold text-gray-900">
-              Iniciar Sesion
-            </h1>
-            <p className="text-gray-500 mt-1">
-              Ingresa tus credenciales para iniciar sesión
-            </p>
-          </header>
-
-          {/* FORMULARIO PRINCIPAL */}
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5"
-            aria-label="Formulario de acceso"
-          >
-            <fieldset className="space-y-4">
-              <legend className="sr-only">Credenciales de usuario</legend>
-
-              {/* USERNAME */}
-              <div>
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Email
-                </label>
-                <input
-                  id="username"
-                  type="text"
-                  name="username"
-                  placeholder="info@gmail.com"
-                  onChange={handleChange}
-                  required
-                  value={credenciales.username}
-                  className="mt-1 w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                />
+            {/* MENSAJE */}
+            {mensaje && (
+              <div
+                role="alert"
+                className="mb-5 p-3 text-sm rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400"
+              >
+                {mensaje}
               </div>
+            )}
 
-              {/* PASSWORD */}
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Password
-                </label>
+            <div>
+              <form onSubmit={handleSubmit}>
+                <div className="space-y-6">
+                  {/* EMAIL */}
+                  <div>
+                    <label
+                      htmlFor="username"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Email <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="username"
+                      type="text"
+                      name="username"
+                      placeholder="info@gmail.com"
+                      onChange={handleChange}
+                      required
+                      value={credenciales.username}
+                      className="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    />
+                  </div>
 
-                <div className="mt-1 relative">
-                  <input
-                    id="password"
-                    type={mostrarPassword ? 'text' : 'password'}
-                    name="password"
-                    placeholder="Enter your password"
-                    onChange={handleChange}
-                    required
-                    value={credenciales.password}
-                    className="w-full border border-gray-300 rounded-md px-4 py-2 pr-12 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  />
+                  {/* PASSWORD */}
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Password <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        id="password"
+                        type={mostrarPassword ? 'text' : 'password'}
+                        name="password"
+                        placeholder="Enter your password"
+                        onChange={handleChange}
+                        required
+                        value={credenciales.password}
+                        className="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      />
+                      <span
+                        onClick={() => setMostrarPassword(!mostrarPassword)}
+                        className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+                      >
+                        {mostrarPassword ? (
+                          <EyeOff className="text-gray-500 dark:text-gray-400 size-5" />
+                        ) : (
+                          <Eye className="text-gray-500 dark:text-gray-400 size-5" />
+                        )}
+                      </span>
+                    </div>
+                  </div>
 
-                  <button
-                    type="button"
-                    onClick={() => setMostrarPassword(!mostrarPassword)}
-                    className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
-                  >
-                    {mostrarPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
+                  {/* SUBMIT BUTTON */}
+                  <div>
+                    <button
+                      type="submit"
+                      disabled={loadingBtn}
+                      className={`w-full py-3 text-sm font-semibold text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${
+                        loadingBtn ? 'opacity-70 cursor-not-allowed' : ''
+                      }`}
+                    >
+                      {loadingBtn ? 'Cargando...' : 'Iniciar Sesión'}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </fieldset>
-
-            {/* SUBMIT BUTTON */}
-            <button
-              type="submit"
-              disabled={loadingBtn}
-              className={`w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-md transition ${
-                loadingBtn ? 'opacity-70 cursor-not-allowed' : ''
-              }`}
-            >
-              {loadingBtn ? 'Cargando...' : 'Sign In'}
-            </button>
-          </form>
-
-          {/* MENSAJE */}
-          {mensaje && (
-            <aside
-              role="alert"
-              className="mt-4 p-3 text-sm rounded bg-yellow-100 text-yellow-800"
-            >
-              {mensaje}
-            </aside>
-          )}
-        </article>
-      </section>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* ======================= SECCIÓN DERECHA ======================= */}
       <aside
@@ -186,7 +194,9 @@ const AdminLogin: FC = () => {
       >
         <div className="absolute inset-0 opacity-20 bg-grid-white" />
         <section className="text-center z-10 px-8">
-          <h2 className="text-3xl font-semibold text-white">Semillitas Ampiu</h2>
+          <h2 className="text-3xl font-semibold text-white">
+            Semillitas Ampiu
+          </h2>
           <p className="text-gray-300 mt-2 text-sm leading-relaxed">
             Este proyecto fue desarrollado con mucho cariño por el equipo de
             Ampiü Wan con la colaboración de la comunidad Ambaló.
