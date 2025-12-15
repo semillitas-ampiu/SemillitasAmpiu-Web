@@ -5,6 +5,7 @@ import ModalAgregarAdministrador from "../../components/modals/ModalAgregarAdmin
 import ModalActualizarAdministrador from "../../components/modals/ModalActualizarAdministrador";
 import { CircleEllipsis } from "lucide-react";
 import Swal from "sweetalert2";
+import { MdUpdate, MdDelete } from 'react-icons/md';
 
 const ListarAdministradores = () => {
   const { deleteData } = useDeleteRequest();
@@ -199,11 +200,10 @@ const ListarAdministradores = () => {
         </div>
       </div>
 
-      {/* 🔹 Menú flotante hacia la izquierda */}
       {menuVisible && (
         <div
           ref={menuRef}
-          className="fixed z-[9999] w-40 bg-white rounded-md shadow-lg dark:bg-gray-800 border dark:border-gray-700 text-start"
+          className="fixed z-[9999] w-44 bg-white rounded-md shadow-lg dark:bg-gray-800 border dark:border-gray-700 text-start"
           style={{ top: menuPos.y, left: menuPos.x }}
         >
           <ul className="py-1">
@@ -214,17 +214,17 @@ const ListarAdministradores = () => {
                     administradores.find((a) => a.id === menuAdminId)
                   )
                 }
-                className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
               >
-                Actualizar
+                <MdUpdate size={18} /> Actualizar
               </button>
             </li>
             <li>
               <button
                 onClick={() => handleDelete(menuAdminId)}
-                className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
               >
-                Eliminar
+                <MdDelete size={18} /> Eliminar
               </button>
             </li>
           </ul>
