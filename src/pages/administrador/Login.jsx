@@ -1,61 +1,69 @@
-import { useState,useContext,useEffect } from "react";
-
+import { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
+import { getApiUrl } from "../../utils/apiConfig";
+import { Eye, EyeOff } from "lucide-react";
 
+const Login = () => {
+    const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [loadingBtn, setLoadingBtn] = useState(false);
 
+    const [mensaje, setMensaje] = useState("");
+    const [credenciales, setCredenciales] = useState({
+        username: "",
+        password: "",
+    });
+    const [mostrarPassword, setMostrarPassword] = useState(false);
 
-
-const BASE_URL = "https://semillitasampiu-api-production.up.railway.app/api/";
-
-const Login=()=>{
-    console.log("Login Rendered")
-    const {login}   = useContext(AuthContext)
-    const navigate = useNavigate()
-    const location = useLocation()
-    const [mensaje,setMensaje]= useState('')
-    const [credenciales,setCredenciales]= useState({username:'', password:''})
-
-
-    useEffect(()=>{
+    useEffect(() => {
         const query = new URLSearchParams(location.search);
-        const message = query.get('message');
+        const message = query.get("message");
         if (message) {
-            setMensaje(message);
-            const timer = setTimeout(() => {
-                setMensaje('');
-            },7200)
-            return ()=>clearTimeout(timer)
-        } 
-    },[location])
-    const handleChange = e =>{
-        setCredenciales({...credenciales,[e.target.name]:e.target.value})
-    }
-    const handleSubmit= async e =>{
-        e.preventDefault()
-        try {
-            const response = await fetch(`${BASE_URL}token/`,{
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body: JSON.stringify(credenciales),
-            })
-            const respuesta = await response.json()
-            login(respuesta)
-            const rol= respuesta.user.rol
-            console.log(rol)
-            if(rol==='Admin'){
-                navigate('/administradores')
-            }
-        } catch (error) {
-            setMensaje('credenciales invalidas'+error)
-            setTimeout(()=>{
-                setMensaje('')
-            },7200)
+        setMensaje(message);
+        const timer = setTimeout(() => {
+            setMensaje("");
+        }, 7200);
+        return () => clearTimeout(timer);
         }
-    }
+    }, [location]);
+
+    const handleChange = (e) => {
+        setCredenciales({ ...credenciales, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoadingBtn(true);
+        try {
+        const response = await fetch(getApiUrl("token/"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credenciales),
+        });
+        const respuesta = await response.json();
+        login(respuesta);
+
+        const rol = respuesta.user.rol;
+        console.log(rol);
+
+        if (rol === "Admin") {
+            navigate("/dashboard");
+        }
+        } catch (error) {
+        setMensaje("credenciales invalidas" + error);
+        setTimeout(() => {
+            setMensaje("");
+        }, 7200);
+        }finally {
+            setLoadingBtn(false);
+        }
+    };
+
     return (
-    <main className="min-h-screen flex flex-col md:flex-row">
-      {/* ======================= SECCIÓN IZQUIERDA ======================= */}
+        <main className="min-h-screen flex flex-col md:flex-row">
+        {/* ======================= SECCIÓN IZQUIERDA ======================= */}
         <section
             aria-label="Formulario de inicio de sesión"
             className="flex flex-col justify-center w-full md:w-1/2 px-8 py-12 bg-white"
@@ -71,11 +79,14 @@ const Login=()=>{
 
             <article className="max-w-md w-full mx-auto space-y-6">
             <header>
-                <h1 className="text-3xl font-semibold text-gray-900">Iniciar Sesion</h1>
+                <h1 className="text-3xl font-semibold text-gray-900">
+                Iniciar Sesion
+                </h1>
                 <p className="text-gray-500 mt-1">
-                Ingresa tus credenciales para iniciar sesion
+                Ingresa tus credenciales para iniciar sesión
                 </p>
             </header>
+
             {/* FORMULARIO PRINCIPAL */}
             <form
                 onSubmit={handleSubmit}
@@ -85,6 +96,7 @@ const Login=()=>{
                 <fieldset className="space-y-4">
                 <legend className="sr-only">Credenciales de usuario</legend>
 
+                {/* USERNAME */}
                 <div>
                     <label
                     htmlFor="username"
@@ -104,6 +116,7 @@ const Login=()=>{
                     />
                 </div>
 
+                {/* PASSWORD */}
                 <div>
                     <label
                     htmlFor="password"
@@ -111,28 +124,44 @@ const Login=()=>{
                     >
                     Password
                     </label>
+
+                    <div className="mt-1 relative">
                     <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    placeholder="Enter your password"
-                    onChange={handleChange}
-                    required
-                    value={credenciales.password}
-                    className="mt-1 w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                        id="password"
+                        type={mostrarPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="Enter your password"
+                        onChange={handleChange}
+                        required
+                        value={credenciales.password}
+                        className="w-full border border-gray-300 rounded-md px-4 py-2 pr-12 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                     />
+
+                    <button
+                        type="button"
+                        onClick={() => setMostrarPassword(!mostrarPassword)}
+                        className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                    >
+                        {mostrarPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                    </div>
                 </div>
                 </fieldset>
+
+                {/* SUBMIT BUTTON */}
                 <button
-                type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-md transition"
-                >
-                Sign In
+                    type="submit"
+                    disabled={loadingBtn}
+                    className={`w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-md transition ${
+                        loadingBtn ? "opacity-70 cursor-not-allowed" : ""
+                    }`}
+                    >
+                    {loadingBtn ? "Cargando..." : "Sign In"}
                 </button>
+
             </form>
 
-            
-
+            {/* MENSAJE */}
             {mensaje && (
                 <aside
                 role="alert"
@@ -153,11 +182,13 @@ const Login=()=>{
             <section className="text-center z-10 px-8">
             <h2 className="text-3xl font-semibold text-white">Semillitas Ampiu</h2>
             <p className="text-gray-300 mt-2 text-sm leading-relaxed">
-                Este proyecto fue desarrollado con mucho cariño por el equipo de Ampiü Wan con la colaboración de la comunidad Ambaló .
+                Este proyecto fue desarrollado con mucho cariño por el equipo de
+                Ampiü Wan con la colaboración de la comunidad Ambaló.
             </p>
             </section>
         </aside>
         </main>
     );
-    };
+};
+
 export default Login;
