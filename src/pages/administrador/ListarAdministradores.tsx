@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 import { CircleEllipsis } from 'lucide-react';
+import { MdDelete, MdUpdate } from 'react-icons/md';
 import Swal from 'sweetalert2';
 
 import ModalActualizarAdministrador from '@/components/modals/ModalActualizarAdministrador';
@@ -226,7 +227,7 @@ const ListarAdministradores = (): ReactElement => {
               <button
                 type="button"
                 onClick={() => setMostrarModalAdmin(true)}
-                className="bg-indigo-600 hover:bg-gray-700 text-white font-medium px-4 py-2 rounded-lg"
+                className="bg-indigo-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
               >
                 + Agregar Administrador
               </button>
@@ -239,7 +240,7 @@ const ListarAdministradores = (): ReactElement => {
       {menuVisible && (
         <div
           ref={menuRef}
-          className="fixed z-[9999] w-40 bg-gray-800 rounded-md shadow-lg border border-gray-700 text-start"
+          className="fixed z-[9999] w-44 bg-white rounded-md shadow-lg dark:bg-gray-800 border dark:border-gray-700 text-start"
           style={{ top: menuPos.y, left: menuPos.x }}
         >
           <ul className="py-1">
@@ -252,9 +253,9 @@ const ListarAdministradores = (): ReactElement => {
                   );
                   if (admin) handleOpenEditar(admin);
                 }}
-                className="w-full text-left block px-4 py-2 text-sm text-gray-200 hover:bg-gray-600"
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
               >
-                Actualizar
+                <MdUpdate size={18} /> Actualizar
               </button>
             </li>
             <li>
@@ -263,9 +264,9 @@ const ListarAdministradores = (): ReactElement => {
                 onClick={() => {
                   if (menuAdminId !== null) handleDelete(menuAdminId);
                 }}
-                className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-600"
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
               >
-                Eliminar
+                <MdDelete size={18} /> Eliminar
               </button>
             </li>
           </ul>

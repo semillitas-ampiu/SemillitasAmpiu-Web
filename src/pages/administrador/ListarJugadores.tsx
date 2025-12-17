@@ -1,14 +1,27 @@
-import { type ReactElement, useCallback, useEffect, useState } from 'react';
+import {
+  type MouseEvent,
+  type ReactElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { MdDelete, MdUpdate } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { CircleEllipsis } from 'lucide-react';
 
 import ModalActualizarJugador from '@/components/modals/ModalActualizarJugador';
 import useDeleteRequest from '@/hooks/useDeleteRequest';
 import useGetRequest from '@/hooks/useGetRequest';
 import usePutRequest from '@/hooks/usePutRequest';
 import type { ActualizarJugadorPayload, ApiError, Jugador } from '@/types';
+
+interface MenuPosition {
+  x: number;
+  y: number;
+}
 
 const ListarJugadores = (): ReactElement => {
   const { getData, data: jugadores, error, loading } = useGetRequest<Jugador>();
@@ -21,6 +34,12 @@ const ListarJugadores = (): ReactElement => {
   const [listaJugadores, setListaJugadores] = useState<Jugador[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
+
+  // Estados del menú (igual que Administradores)
+  const [menuVisible, setMenuVisible] = useState<boolean>(false);
+  const [menuJugadorId, setMenuJugadorId] = useState<number | null>(null);
+  const [menuPos, setMenuPos] = useState<MenuPosition>({ x: 0, y: 0 });
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -47,6 +66,30 @@ const ListarJugadores = (): ReactElement => {
     setJugadorSeleccionado(jugador);
     setMostrarModal(true);
   }, []);
+
+  // Abrir menú: hacia la izquierda y pegado al botón
+  const abrirMenu = (
+    jugadorId: number,
+    event: MouseEvent<HTMLButtonElement>
+  ): void => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    setMenuPos({
+      x: rect.left - 170,
+      y: rect.top + scrollY - 5,
+    });
+
+    setMenuJugadorId(jugadorId);
+    setMenuVisible(true);
+  };
+
+  const handleOpenActualizar = (jugador: Jugador | undefined): void => {
+    if (jugador) {
+      abrirModalActualizar(jugador);
+    }
+    setMenuVisible(false);
+  };
 
   const handleUpdate = async (
     formData: ActualizarJugadorPayload
@@ -88,6 +131,8 @@ const ListarJugadores = (): ReactElement => {
   };
 
   const handleDelete = async (id: number): Promise<void> => {
+    setMenuVisible(false);
+
     const result = await Swal.fire({
       title: '¿Estás seguro?',
       text: 'Esta acción eliminará el jugador de forma permanente.',
@@ -134,6 +179,17 @@ const ListarJugadores = (): ReactElement => {
       });
     }
   };
+
+  // Cerrar menú al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (e: globalThis.MouseEvent): void => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuVisible(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleNextPage = (): void => {
     if (currentPage < totalPages) {
@@ -191,7 +247,7 @@ const ListarJugadores = (): ReactElement => {
                       <th className="px-5 py-3 font-medium text-gray-400 text-start text-theme-xs">
                         fecha de nacimiento
                       </th>
-                      <th className="px-5 py-3 font-medium text-gray-400 text-start text-theme-xs">
+                      <th className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
                         Acciones
                       </th>
                     </tr>
@@ -213,28 +269,15 @@ const ListarJugadores = (): ReactElement => {
                         <td className="px-4 py-3 text-gray-400 text-start text-theme-sm">
                           {jugador?.fecha_nacimiento}
                         </td>
-                        <td className="px-2 py-2 text-sm space-x-1">
-                          <Link
-                            to={`/detalles/${jugador.id}`}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded-md transition inline-block"
-                          >
-                            <FaInfoCircle size={22} />
-                          </Link>
 
+                        {/* Acciones con menú desplegable */}
+                        <td className="px-4 py-3 text-center relative text-gray-300">
                           <button
                             type="button"
-                            onClick={() => abrirModalActualizar(jugador)}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded-md transition inline-block"
+                            onClick={(e) => abrirMenu(jugador.id, e)}
+                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
                           >
-                            <MdUpdate size={22} />
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(jugador.id)}
-                            className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-md transition inline-block"
-                          >
-                            <MdDelete size={22} />
+                            <CircleEllipsis size={20} />
                           </button>
                         </td>
                       </tr>
@@ -285,6 +328,55 @@ const ListarJugadores = (): ReactElement => {
           </div>
         </div>
       </div>
+
+      {/* Menú flotante (igual que Administradores) */}
+      {menuVisible && (
+        <div
+          ref={menuRef}
+          className="fixed z-[9999] w-44 bg-white rounded-md shadow-lg dark:bg-gray-800 border dark:border-gray-700 text-start"
+          style={{ top: menuPos.y, left: menuPos.x }}
+        >
+          <ul className="py-1">
+            <li>
+              <Link
+                to={`/detalles/${menuJugadorId}`}
+                onClick={() => setMenuVisible(false)}
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
+              >
+                <FaInfoCircle size={18} />
+                Ver detalles
+              </Link>
+            </li>
+
+            <li>
+              <button
+                type="button"
+                onClick={() =>
+                  handleOpenActualizar(
+                    jugadoresPaginados.find((j) => j.id === menuJugadorId) ||
+                      listaJugadores.find((j) => j.id === menuJugadorId)
+                  )
+                }
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
+              >
+                <MdUpdate size={18} />
+                Actualizar
+              </button>
+            </li>
+
+            <li>
+              <button
+                type="button"
+                onClick={() => menuJugadorId && handleDelete(menuJugadorId)}
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
+              >
+                <MdDelete size={18} />
+                Eliminar
+              </button>
+            </li>
+          </ul>
+        </div>
+      )}
 
       {mostrarModal && (
         <ModalActualizarJugador
