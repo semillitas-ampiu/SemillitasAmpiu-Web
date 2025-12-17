@@ -182,13 +182,13 @@ const ListarJugadores = (): ReactElement => {
 
   // 🔹 Cerrar menú al hacer clic fuera
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+    const handleClickOutside = (e: globalThis.MouseEvent): void => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setMenuVisible(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Cerrar menú al hacer clic fuera
