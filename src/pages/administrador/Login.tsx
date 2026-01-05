@@ -10,12 +10,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 
 import { AuthContext } from '@/context/authContext';
-import type { Credenciales, LoginResponse } from '@/types';
+import type { ApiError, Credenciales, LoginResponse } from '@/types';
 import { getApiUrl } from '@/utils/apiConfig';
 
 /**
  * Página de login para administradores
- * Incluye toggle de visibilidad de password
+ * Incluye validación de campos, manejo seguro de errores y toggle de password
  */
 const AdminLogin: FC = () => {
   const authContext = useContext(AuthContext);
@@ -24,17 +24,25 @@ const AdminLogin: FC = () => {
   const [loadingBtn, setLoadingBtn] = useState<boolean>(false);
 
   const [mensaje, setMensaje] = useState<string>('');
+  const [mensajeTipo, setMensajeTipo] = useState<'error' | 'info'>('info');
   const [credenciales, setCredenciales] = useState<Credenciales>({
     username: '',
     password: '',
   });
   const [mostrarPassword, setMostrarPassword] = useState<boolean>(false);
 
+  // Estados para validación de campos
+  const [touched, setTouched] = useState<{ username: boolean; password: boolean }>({
+    username: false,
+    password: false,
+  });
+
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const message = query.get('message');
     if (message) {
       setMensaje(message);
+      setMensajeTipo('info');
       const timer = setTimeout(() => {
         setMensaje('');
       }, 7200);
@@ -44,40 +52,113 @@ const AdminLogin: FC = () => {
   }, [location]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setCredenciales({ ...credenciales, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setCredenciales({ ...credenciales, [name]: value });
+    // Limpiar mensaje de error cuando el usuario empieza a escribir
+    if (mensaje && mensajeTipo === 'error') {
+      setMensaje('');
+    }
+  };
+
+  const handleBlur = (field: 'username' | 'password'): void => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
+
+  /**
+   * Valida los campos del formulario
+   * @returns true si el formulario es válido
+   */
+  const validateForm = (): boolean => {
+    const errors: string[] = [];
+
+    if (!credenciales.username.trim()) {
+      errors.push('El email/usuario es requerido');
+    }
+    if (!credenciales.password.trim()) {
+      errors.push('La contraseña es requerida');
+    }
+
+    if (errors.length > 0) {
+      setMensaje(errors.join('. '));
+      setMensajeTipo('error');
+      setTouched({ username: true, password: true });
+      return false;
+    }
+
+    return true;
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+
+    // Validar campos antes de enviar
+    if (!validateForm()) {
+      return;
+    }
+
     setLoadingBtn(true);
+    setMensaje('');
+
     try {
       const response = await fetch(getApiUrl('token/'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credenciales),
       });
-      const respuesta: LoginResponse = await response.json();
-      authContext?.login(respuesta);
 
-      const rol = respuesta.user.rol;
-      console.log(rol);
+      // CRÍTICO: Verificar que la respuesta sea exitosa ANTES de procesar
+      if (!response.ok) {
+        // La API devolvió un error (401, 400, 500, etc.)
+        const errorData: ApiError = await response.json().catch(() => ({}));
+        const errorMessage =
+          errorData.detail ||
+          errorData.error ||
+          errorData.mensaje ||
+          'Credenciales inválidas. Por favor, verifica tu usuario y contraseña.';
 
-      if (rol === 'Admin') {
-        navigate('/dashboard');
+        setMensaje(errorMessage);
+        setMensajeTipo('error');
+        setLoadingBtn(false);
+        return;
       }
+
+      // La respuesta fue exitosa (2xx)
+      const respuesta: LoginResponse = await response.json();
+
+      // Validar que la respuesta tenga la estructura esperada
+      if (!respuesta.access || !respuesta.user) {
+        setMensaje('Error en la respuesta del servidor. Intenta de nuevo.');
+        setMensajeTipo('error');
+        setLoadingBtn(false);
+        return;
+      }
+
+      // Validar que el usuario tenga rol de Admin
+      if (respuesta.user.rol !== 'Admin') {
+        setMensaje('No tienes permisos de administrador para acceder a este panel.');
+        setMensajeTipo('error');
+        setLoadingBtn(false);
+        return;
+      }
+
+      // Todo OK - hacer login y navegar
+      authContext?.login(respuesta);
+      navigate('/dashboard');
     } catch (error) {
+      // Error de red o error inesperado
+      console.error('Error en login:', error);
       setMensaje(
-        `credenciales invalidas${
-          error instanceof Error ? `: ${error.message}` : ''
-        }`
+        'Error de conexión. Por favor, verifica tu conexión a internet e intenta de nuevo.'
       );
-      setTimeout(() => {
-        setMensaje('');
-      }, 7200);
+      setMensajeTipo('error');
     } finally {
       setLoadingBtn(false);
     }
   };
+
+  // Determinar si mostrar error de campo individual
+  const showUsernameError = touched.username && !credenciales.username.trim();
+  const showPasswordError = touched.password && !credenciales.password.trim();
 
   return (
     <main className="min-h-screen flex flex-col md:flex-row bg-white dark:bg-gray-900">
@@ -103,18 +184,22 @@ const AdminLogin: FC = () => {
               </p>
             </div>
 
-            {/* MENSAJE */}
+            {/* MENSAJE DE ERROR/INFO */}
             {mensaje && (
               <div
                 role="alert"
-                className="mb-5 p-3 text-sm rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400"
+                className={`mb-5 p-3 text-sm rounded ${
+                  mensajeTipo === 'error'
+                    ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                    : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                }`}
               >
                 {mensaje}
               </div>
             )}
 
             <div>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} noValidate>
                 <div className="space-y-6">
                   {/* EMAIL */}
                   <div>
@@ -130,10 +215,23 @@ const AdminLogin: FC = () => {
                       name="username"
                       placeholder="info@gmail.com"
                       onChange={handleChange}
-                      required
+                      onBlur={() => handleBlur('username')}
+                      autoComplete="username"
+                      aria-required="true"
+                      aria-invalid={showUsernameError}
+                      aria-describedby={showUsernameError ? 'username-error' : undefined}
                       value={credenciales.username}
-                      className="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      className={`w-full px-4 py-3 text-sm border rounded-lg bg-white dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                        showUsernameError
+                          ? 'border-red-500 dark:border-red-500'
+                          : 'border-gray-300 dark:border-gray-700'
+                      }`}
                     />
+                    {showUsernameError && (
+                      <p id="username-error" className="mt-1 text-sm text-red-500">
+                        El email/usuario es requerido
+                      </p>
+                    )}
                   </div>
 
                   {/* PASSWORD */}
@@ -151,21 +249,36 @@ const AdminLogin: FC = () => {
                         name="password"
                         placeholder="Enter your password"
                         onChange={handleChange}
-                        required
+                        onBlur={() => handleBlur('password')}
+                        autoComplete="current-password"
+                        aria-required="true"
+                        aria-invalid={showPasswordError}
+                        aria-describedby={showPasswordError ? 'password-error' : undefined}
                         value={credenciales.password}
-                        className="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        className={`w-full px-4 py-3 text-sm border rounded-lg bg-white dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                          showPasswordError
+                            ? 'border-red-500 dark:border-red-500'
+                            : 'border-gray-300 dark:border-gray-700'
+                        }`}
                       />
-                      <span
+                      <button
+                        type="button"
                         onClick={() => setMostrarPassword(!mostrarPassword)}
                         className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+                        aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                       >
                         {mostrarPassword ? (
                           <EyeOff className="text-gray-500 dark:text-gray-400 size-5" />
                         ) : (
                           <Eye className="text-gray-500 dark:text-gray-400 size-5" />
                         )}
-                      </span>
+                      </button>
                     </div>
+                    {showPasswordError && (
+                      <p id="password-error" className="mt-1 text-sm text-red-500">
+                        La contraseña es requerida
+                      </p>
+                    )}
                   </div>
 
                   {/* SUBMIT BUTTON */}
