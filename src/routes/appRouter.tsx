@@ -11,6 +11,7 @@ import Login from '@/pages/administrador/Login';
 import Logout from '@/pages/administrador/Logout';
 import HomePage from '@/pages/Home/HomePage';
 import PrivateRoute from '@/routes/PrivateRouter';
+import Palabras from '@/pages/administrador/Palabras';
 
 const AppRouter = (): ReactElement => {
   return (
@@ -42,6 +43,15 @@ const AppRouter = (): ReactElement => {
           </PrivateRoute>
         }
       />
+      
+      <Route
+        path="/palabras"
+        element={
+          <PrivateRoute>
+            <AdminLayout><Palabras /></AdminLayout>
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/detalles/:id"
         element={
@@ -53,5 +63,6 @@ const AppRouter = (): ReactElement => {
     </Routes>
   );
 };
+
 
 export default AppRouter;
