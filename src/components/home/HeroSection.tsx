@@ -4,20 +4,8 @@ import { SparklesIcon } from '@heroicons/react/24/solid';
 // =======================================================
 // 🟢 CONFIGURACIÓN DE LA DESCARGA
 // =======================================================
-interface ApkDownloadConfig {
-  /** ID extraído del enlace de Google Drive */
-  googleDriveId: string;
-  /** Nombre que se sugiere para el archivo descargado */
-  nombreArchivo: string;
-}
-
-const APK_DOWNLOAD_CONFIG: ApkDownloadConfig = {
-  googleDriveId: '10R6uA96bW6IOX06P-VtEjYxZg8jleVL7',
-  nombreArchivo: 'game_semillitas_ampiu.apk',
-};
+const downloadUrl = 'https://maubry.itch.io/semillitas-ampiu';
 // =======================================================
-
-const downloadUrl = `https://drive.google.com/uc?export=download&id=${APK_DOWNLOAD_CONFIG.googleDriveId}`;
 
 /**
  * Hero section con diseño adaptado de Next.js template
@@ -47,7 +35,6 @@ const Hero: FC = () => {
                 <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                   <a
                     href={downloadUrl}
-                    download={APK_DOWNLOAD_CONFIG.nombreArchivo}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="rounded-sm bg-blue-600 px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-blue-700 shadow-lg hover:shadow-xl"
