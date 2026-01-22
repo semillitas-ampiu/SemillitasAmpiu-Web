@@ -65,6 +65,18 @@ const NavPrincipal = ({ navbarOpen }: NavPrincipalProps): ReactNode => {
                   Jugadores
                 </Link>
               </li>
+                 <li className="group relative">
+                   <Link
+                     to="/palabras"
+                     className={`flex py-2 text-base lg:inline-flex lg:px-0 lg:py-6 ${
+                       location.pathname === '/palabras'
+                         ? 'text-blue-400'
+                         : 'text-blue-100 hover:text-white'
+                     }`}
+                   >
+                     Palabras
+                   </Link>
+                 </li>
             </ul>
 
             <div className="mt-4 lg:mt-0">

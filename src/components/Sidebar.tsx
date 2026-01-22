@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   LogOut,
   Users,
+  BookOpen,
 } from 'lucide-react';
 
 import type { SidebarLinkProps, SidebarProps } from '@/types';
@@ -79,6 +80,13 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps): ReactN
           label="Jugadores"
           icon={Users}
           active={location.pathname.startsWith('/jugadores')}
+          isCollapsed={isCollapsed}
+        />
+        <SidebarLink
+          to="/palabras"
+          label="Palabras"
+          icon={BookOpen}
+          active={location.pathname.startsWith('/palabras')}
           isCollapsed={isCollapsed}
         />
         <SidebarLink

@@ -133,7 +133,16 @@ export interface ActualizarJugadorPayload {
 export interface Palabra {
   id: number;
   pal_ampiu: string;
-  pal_espanol: string; // Corregido el typo 'pal_español' -> snake_case consistente
+  pal_español: string; // Corregido el typo 'pal_español' -> snake_case consistente
+  nivel: number;
+}
+
+/**
+ * Payload para actualizar una palabra
+ */
+export interface ActualizarPalabraPayload {
+  pal_ampiu: string;
+  pal_espanol: string;
   nivel: number;
 }
 
@@ -277,9 +286,8 @@ export interface NavPrincipalProps {
 // ============================================================================
 
 export interface BarChartDataPoint {
-  day: string;
-  sales: number;
-  revenue: number;
+  label: string;
+  count: number;
 }
 
 export interface LineChartDataPoint {
