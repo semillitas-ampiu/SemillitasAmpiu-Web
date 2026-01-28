@@ -1,11 +1,12 @@
 import type { FC } from 'react';
-import { 
-  CartesianGrid, 
-  Line, 
-  LineChart, 
-  Tooltip, 
-  XAxis, 
-  YAxis 
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
 
 import type { LineChartDataPoint } from '@/types';
@@ -35,14 +36,18 @@ const data: LineChartDataPoint[] = [
  */
 const SalesLineChart: FC = () => {
   return (
-    <LineChart width={500} height={250} data={data}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Line type="monotone" dataKey="p1" stroke="#3b82f6" strokeWidth={3} />
-      <Line type="monotone" dataKey="p2" stroke="#10b981" strokeWidth={3} />
-    </LineChart>
+    <div className="w-full h-64">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Line type="monotone" dataKey="p1" stroke="#3b82f6" strokeWidth={3} />
+          <Line type="monotone" dataKey="p2" stroke="#10b981" strokeWidth={3} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
 };
 

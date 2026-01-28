@@ -120,12 +120,12 @@ export default function Dashboard(): ReactElement {
 
       {/* CHARTS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="bg-gray-800 p-4 rounded-xl shadow border-gray-700 border">
+        {/* <div className="bg-gray-800 p-4 rounded-xl shadow border-gray-700 border">
           <h2 className="font-semibold mb-4 text-white">
             Palabras mas recolectadas
           </h2>
           <SalesLineChart />
-        </div>
+        </div> */}
 
         <div className="bg-gray-800 p-4 rounded-xl shadow  border-gray-700 border">
           <h2 className="font-semibold mb-4 text-white">
