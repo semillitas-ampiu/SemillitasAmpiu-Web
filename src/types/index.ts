@@ -161,6 +161,30 @@ export interface Recoleccion {
   };
 }
 
+/**
+ * Resultado de evaluación de un jugador
+ * Usado para el ranking de puntajes
+ */
+export interface Resultado {
+  id: number;
+  usuario: number;
+  puntaje: number;
+  completado: boolean;
+  fecha: string; // ISO date string
+  evaluacion: number;
+}
+
+/**
+ * Jugador con su puntaje para el ranking
+ * Tipo derivado para mostrar en el componente RankingJugadores
+ */
+export interface JugadorRanking {
+  id: number;
+  username: string;
+  puntaje: number;
+  posicion: number;
+}
+
 // ============================================================================
 // API RESPONSES - Tipos genéricos para las respuestas
 // ============================================================================
