@@ -7,6 +7,7 @@ import {
 } from 'react';
 
 import type { FormDatosJugador, ModalActualizarJugadorProps } from '@/types';
+import { cn } from '@/utils/cn';
 
 /**
  * Modal para actualizar los datos de un jugador
@@ -54,7 +55,11 @@ const ModalActualizarJugador: FC<ModalActualizarJugadorProps> = ({
         aria-label="Cerrar modal"
       />
 
-      <div className="relative z-[10000] w-full max-w-lg">
+      <div
+        className={cn(
+          'relative z-[10000] w-[calc(100%-2rem)] max-w-lg mx-auto'
+        )}
+      >
         <div className="rounded-2xl border border-gray-800 bg-gray-900 shadow-2xl">
           {/* Encabezado */}
           <div className="px-6 py-4 flex items-center border-b border-gray-800">

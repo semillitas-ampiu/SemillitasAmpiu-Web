@@ -15,6 +15,7 @@ import ModalAgregarAdministrador from '@/components/modals/ModalAgregarAdministr
 import useDeleteRequest from '@/hooks/useDeleteRequest';
 import useGetRequest from '@/hooks/useGetRequest';
 import type { Administrador, ApiError } from '@/types';
+import { cn } from '@/utils/cn';
 
 interface MenuPosition {
   x: number;
@@ -173,7 +174,37 @@ const ListarAdministradores = (): ReactElement => {
         <div className="p-4 border-t border-gray-800 sm:p-6">
           <div className="space-y-6">
             <div className="overflow-hidden rounded-xl border border-white/[0.05] bg-white/[0.03]">
-              <div className="max-w-full overflow-x-auto">
+              {/* Vista mobile: Cards */}
+              <div className="md:hidden divide-y divide-white/[0.05]">
+                {administradores.map((admin) => (
+                  <div
+                    key={admin.id}
+                    className="p-4 flex items-center justify-between gap-3"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-white/90 truncate">
+                        {admin.first_name} {admin.last_name}
+                      </p>
+                      <p className="text-sm text-gray-400 truncate">
+                        {admin.email}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {admin.fecha_nacimiento}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => abrirMenu(admin.id, e)}
+                      className="p-2 rounded-full hover:bg-gray-700 text-gray-300 flex-shrink-0"
+                    >
+                      <CircleEllipsis size={20} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Vista desktop: Tabla */}
+              <div className="hidden md:block max-w-full overflow-x-auto">
                 <table className="min-w-full">
                   {/* Table Header */}
                   <thead className="border-b border-white/[0.05]">
@@ -223,11 +254,11 @@ const ListarAdministradores = (): ReactElement => {
                 </table>
               </div>
             </div>
-            <div className="flex justify-end mb-4 px-6">
+            <div className={cn('flex justify-end mb-4 px-2 sm:px-6')}>
               <button
                 type="button"
                 onClick={() => setMostrarModalAdmin(true)}
-                className="bg-indigo-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm sm:text-base"
               >
                 + Agregar Administrador
               </button>

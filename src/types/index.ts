@@ -133,7 +133,16 @@ export interface ActualizarJugadorPayload {
 export interface Palabra {
   id: number;
   pal_ampiu: string;
-  pal_espanol: string; // Corregido el typo 'pal_español' -> snake_case consistente
+  pal_español: string; // Corregido el typo 'pal_español' -> snake_case consistente
+  nivel: number;
+}
+
+/**
+ * Payload para actualizar una palabra
+ */
+export interface ActualizarPalabraPayload {
+  pal_ampiu: string;
+  pal_espanol: string;
   nivel: number;
 }
 
@@ -150,6 +159,30 @@ export interface Recoleccion {
     pal_español: string;
     nivel: number;
   };
+}
+
+/**
+ * Resultado de evaluación de un jugador
+ * Usado para el ranking de puntajes
+ */
+export interface Resultado {
+  id: number;
+  usuario: number;
+  puntaje: number;
+  completado: boolean;
+  fecha: string; // ISO date string
+  evaluacion: number;
+}
+
+/**
+ * Jugador con su puntaje para el ranking
+ * Tipo derivado para mostrar en el componente RankingJugadores
+ */
+export interface JugadorRanking {
+  id: number;
+  username: string;
+  puntaje: number;
+  posicion: number;
 }
 
 // ============================================================================
@@ -252,6 +285,10 @@ export interface StatsCardProps {
 export interface SidebarProps {
   isCollapsed: boolean;
   onToggle: () => void;
+  /** En mobile, controla si el drawer está abierto */
+  isMobileOpen: boolean;
+  /** Callback para cerrar el drawer en mobile */
+  onMobileClose: () => void;
 }
 
 /**
@@ -277,9 +314,8 @@ export interface NavPrincipalProps {
 // ============================================================================
 
 export interface BarChartDataPoint {
-  day: string;
-  sales: number;
-  revenue: number;
+  label: string;
+  count: number;
 }
 
 export interface LineChartDataPoint {
