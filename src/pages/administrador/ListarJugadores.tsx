@@ -17,6 +17,7 @@ import useDeleteRequest from '@/hooks/useDeleteRequest';
 import useGetRequest from '@/hooks/useGetRequest';
 import usePutRequest from '@/hooks/usePutRequest';
 import type { ActualizarJugadorPayload, ApiError, Jugador } from '@/types';
+import { cn } from '@/utils/cn';
 
 interface MenuPosition {
   x: number;
@@ -245,7 +246,34 @@ const ListarJugadores = (): ReactElement => {
         <div className="p-4 border-t border-gray-800 sm:p-6">
           <div className="space-y-6">
             <div className="overflow-hidden rounded-xl border border-white/[0.05] bg-white/[0.03]">
-              <div className="max-w-full overflow-x-auto">
+              {/* Vista mobile: Cards */}
+              <div className="md:hidden divide-y divide-white/[0.05]">
+                {jugadoresPaginados.map((jugador) => (
+                  <div
+                    key={jugador.id}
+                    className="p-4 flex items-center justify-between gap-3"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-white/90 truncate">
+                        {jugador.username}
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        ID: {jugador.id} • {jugador.fecha_nacimiento}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => abrirMenu(jugador.id, e)}
+                      className="p-2 rounded-full hover:bg-gray-700 text-gray-300 flex-shrink-0"
+                    >
+                      <CircleEllipsis size={20} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Vista desktop: Tabla */}
+              <div className="hidden md:block max-w-full overflow-x-auto">
                 <table className="min-w-full">
                   <thead className="border-b border-white/[0.05]">
                     <tr>
@@ -298,37 +326,58 @@ const ListarJugadores = (): ReactElement => {
                 </table>
               </div>
 
+              {/* Paginación - visible en ambas vistas */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-4 mb-4">
+                <div className={cn(
+                  'flex items-center justify-center gap-2 py-4 px-4',
+                  'border-t border-white/[0.05]'
+                )}>
                   <button
                     type="button"
-                    className="px-3 py-1 border rounded disabled:opacity-50 bg-gray-200"
+                    className={cn(
+                      'px-3 py-1.5 text-sm rounded-lg transition',
+                      'bg-gray-700 text-white hover:bg-gray-600',
+                      'disabled:opacity-50 disabled:cursor-not-allowed'
+                    )}
                     onClick={handlePrevPage}
                     disabled={currentPage === 1}
                   >
                     Anterior
                   </button>
 
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (page) => (
-                      <button
-                        type="button"
-                        key={page}
-                        className={`px-3 py-1 rounded ${
-                          page === currentPage
-                            ? 'bg-gray-200 font-semibold'
-                            : ''
-                        }`}
-                        onClick={() => goToPage(page)}
-                      >
-                        {page}
-                      </button>
-                    )
-                  )}
+                  {/* En mobile, solo mostrar página actual */}
+                  <span className="md:hidden text-sm text-gray-400">
+                    {currentPage} / {totalPages}
+                  </span>
+
+                  {/* En desktop, mostrar todos los números */}
+                  <div className="hidden md:flex gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) => (
+                        <button
+                          type="button"
+                          key={page}
+                          className={cn(
+                            'px-3 py-1.5 text-sm rounded-lg transition',
+                            page === currentPage
+                              ? 'bg-indigo-600 text-white font-semibold'
+                              : 'text-gray-400 hover:bg-gray-700'
+                          )}
+                          onClick={() => goToPage(page)}
+                        >
+                          {page}
+                        </button>
+                      )
+                    )}
+                  </div>
 
                   <button
                     type="button"
-                    className="px-3 py-1 border rounded disabled:opacity-50 bg-gray-200"
+                    className={cn(
+                      'px-3 py-1.5 text-sm rounded-lg transition',
+                      'bg-gray-700 text-white hover:bg-gray-600',
+                      'disabled:opacity-50 disabled:cursor-not-allowed'
+                    )}
                     onClick={handleNextPage}
                     disabled={currentPage === totalPages}
                   >

@@ -285,6 +285,10 @@ export interface StatsCardProps {
 export interface SidebarProps {
   isCollapsed: boolean;
   onToggle: () => void;
+  /** En mobile, controla si el drawer está abierto */
+  isMobileOpen: boolean;
+  /** Callback para cerrar el drawer en mobile */
+  onMobileClose: () => void;
 }
 
 /**

@@ -107,7 +107,7 @@ const ModalActualizarAdministrador: FC<ModalActualizarAdministradorProps> = ({
         aria-label="Cerrar modal"
       />
 
-      <div className="relative z-[10000] w-full max-w-lg">
+      <div className="relative z-[10000] w-[calc(100%-2rem)] max-w-lg mx-auto">
         <div className="rounded-2xl border border-gray-800 bg-gray-900 shadow-2xl">
           {/* Card Header */}
           <div className="px-6 py-5 flex items-center border-b border-gray-800">
