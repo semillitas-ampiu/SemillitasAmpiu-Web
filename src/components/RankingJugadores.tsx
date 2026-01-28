@@ -6,11 +6,11 @@ import type { Jugador, Resultado, JugadorRanking } from '@/types';
 
 /**
  * Componente que muestra el TOP 5 de jugadores con mayor puntaje
- * 
+ *
  * Hace fetch a:
  * - /api/resultado/ para obtener puntajes
  * - /api/jugador/ para obtener usernames
- * 
+ *
  * Luego cruza los datos y muestra el ranking ordenado
  */
 const RankingJugadores = (): ReactElement => {
@@ -45,17 +45,26 @@ const RankingJugadores = (): ReactElement => {
 
     // Crear mapa de jugadores: id -> username
     const jugadoresMap = new Map<number, string>(
-      jugadores.map((j) => [j.id, j.username])
+      jugadores.map((j) => [j.id, j.username]),
     );
 
-    // Ordenar resultados por puntaje descendente y tomar top 5
-    const top5 = [...resultados]
-      .sort((a, b) => b.puntaje - a.puntaje)
+    // Agrupar por jugador y quedarse con el puntaje más alto de cada uno
+    const mejorPuntajePorJugador = new Map<number, number>();
+    resultados.forEach((resultado) => {
+      const puntajeActual = mejorPuntajePorJugador.get(resultado.usuario) ?? 0;
+      if (resultado.puntaje > puntajeActual) {
+        mejorPuntajePorJugador.set(resultado.usuario, resultado.puntaje);
+      }
+    });
+
+    // Convertir a array, ordenar por puntaje descendente y tomar top 5
+    const top5 = Array.from(mejorPuntajePorJugador.entries())
+      .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
-      .map((resultado, index) => ({
-        id: resultado.usuario,
-        username: jugadoresMap.get(resultado.usuario) || `Jugador ${resultado.usuario}`,
-        puntaje: resultado.puntaje,
+      .map(([usuarioId, puntaje], index) => ({
+        id: usuarioId,
+        username: jugadoresMap.get(usuarioId) || `Jugador ${usuarioId}`,
+        puntaje,
         posicion: index + 1,
       }));
 
@@ -118,7 +127,9 @@ const RankingJugadores = (): ReactElement => {
                 <span className="text-2xl w-10 text-center">
                   {getMedallaIcon(jugador.posicion)}
                 </span>
-                <span className="text-white font-medium">{jugador.username}</span>
+                <span className="text-white font-medium">
+                  {jugador.username}
+                </span>
               </div>
               <span className="text-yellow-400 font-bold">
                 {jugador.puntaje.toLocaleString()} pts
